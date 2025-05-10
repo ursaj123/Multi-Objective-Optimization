@@ -3,6 +3,7 @@ import os
 import sys
 import numpy as np
 import pandas as pd
+from itertools import product
 
 sys.path.append(os.path.join('/'.join(os.path.dirname(__file__).split('/')[:-2]), 'metrics'))
 sys.path.append(os.path.join('/'.join(os.path.dirname(__file__).split('/')[:-2]), 'problems'))
@@ -18,6 +19,41 @@ print(f"Problem list - {class_list.keys()}")
 print('Modules imported successfully')
 
 os.makedirs(os.path.join(os.path.dirname(__file__), 'results'), exist_ok=True)
+
+
+
+
+#############################  BASIC TEST CASE HANDLING #######################################
+# let us first confirm that the algorithm is well implemented (basic test case, where m=1
+# we will be comparing the approximated answer of CIRCULAR problem with the original soln, if it lies in proximity,
+# then only we will proceed for the multiobjective optimization
+
+N, COND_NUM = [20, 30], [1e1, 1e2]
+# N, COND_NUM = [10], [1e2]
+for n, cond_num in product(N, COND_NUM):
+    print(f"{'-'*50}")
+    print(f"Problem - CIRCULAR, n = {n}, cond_num = {cond_num}")
+    problem = class_list['CIRCULAR'](n=n, cond_num=cond_num)
+    solver = MultiObjectiveSteepestDescent(
+        problem=problem,
+        beta=0.1,
+        sigma=0.1,
+        tol=1e-4,
+        max_iter=1000,
+    )
+    result = solver.solve(
+        x0=np.random.rand(n)
+    )
+    print(f"result = {result}")
+    print(f"Result Difference = {np.linalg.norm(result['x'] - problem.orig_soln)}")
+
+    print(f"{'-'*50}")
+
+sys.exit()
+##################################################################################################
+
+
+
 
 
 

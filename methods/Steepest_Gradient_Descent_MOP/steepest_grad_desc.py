@@ -60,6 +60,8 @@ class MultiObjectiveSteepestDescent:
         converged = False
         
         for k in range(self.max_iter):
+            # print(f"Iteration {k+1}/{self.max_iter}")
+            # print(f"Current x: {x}")
             # Compute Jacobian (stacked gradients)
             J = self.problem.evaluate_gradients_f(x)
             
@@ -107,10 +109,14 @@ class MultiObjectiveSteepestDescent:
         res = minimize(obj, x0=np.zeros(n+1), 
                       constraints=constraints, 
                       method='SLSQP',
-                      options={'ftol': 1e-6})
+                    #   options={'ftol': 1e-8}
+        )
         
         if not res.success:
-            raise RuntimeError(f"Direction QP failed: {res.message}")
+            # x = x + np.random.uniform(low=-0.1, high=0.1, size=n)
+            print(f"QP failed: {res.message}")
+            return np.zeros(n), 0.0
+             
             
         return res.x[1:], res.x[0]
 
