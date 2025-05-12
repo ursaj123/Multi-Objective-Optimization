@@ -51,10 +51,10 @@ def plot_3d_pareto_front(f_true=None, f_approx=None,
     ax = fig.add_subplot(111, projection='3d')
 
     if f_true is not None:
-        ax.scatter(f_true[0], f_true[1], f_true[2], color=color_true, s=point_size, label=label_true)
+        ax.scatter(f_true[:, 0], f_true[:, 1], f_true[:, 2], color=color_true, s=point_size, label=label_true)
 
     if f_approx is not None:
-        ax.scatter(f_approx[0], f_approx[1], f_approx[2], color=color_approx, s=point_size, label=label_approx)
+        ax.scatter(f_approx[:, 0], f_approx[:, 1], f_approx[:, 2], color=color_approx, s=point_size, label=label_approx)
 
     ax.set_xlabel(r'$f_1(x)$')
     ax.set_ylabel(r'$f_2(x)$')
