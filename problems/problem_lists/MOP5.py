@@ -14,9 +14,9 @@ class MOP5:
         """
         self.n = 2
         self.m = 3
-        self.bounds = tuple([(-30, 30)] * 2)
-        self.lb = -30
-        self.ub = 30
+        self.bounds = tuple([(-3, 3)] * 2)
+        self.lb = -3
+        self.ub = 3
         self.g_type = g_type
         self.constraints = []
         self.true_pareto_front = self.calculate_optimal_pareto_front()

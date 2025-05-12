@@ -1,6 +1,7 @@
 # File: multi_objective_gradient.py
 import numpy as np
 from scipy.optimize import minimize
+from scipy.optimize import LinearConstraint
 import time
 
 class MultiObjectiveSteepestDescent:
@@ -93,31 +94,95 @@ class MultiObjectiveSteepestDescent:
         }
         return self.result
 
-    def _compute_direction(self, J):
-        """Solve QP: min α + ½||v||² s.t. Jv ≤ α"""
-        m, n = J.shape
+    # def _compute_direction(self, J):
+    #     """Solve QP: min α + ½||v||² s.t. Jv ≤ α"""
+    #     m, n = J.shape
         
-        # Solve using scipy's QP solver
-        def obj(z):
-            return z[0] + 0.5 * z[1:].dot(z[1:])
+    #     # Solve using scipy's QP solver
+    #     def obj(z):
+    #         return z[0] + 0.5 * z[1:].dot(z[1:])
             
-        constraints = [{
-            'type': 'ineq',
-            'fun': lambda z, i=i: -J[i].dot(z[1:]) + z[0]
-        } for i in range(m)]
+    #     constraints = [{
+    #         'type': 'ineq',
+    #         'fun': lambda z, i=i: -J[i].dot(z[1:]) + z[0],
+    #         # 'jac': lambda z, i=i: np.concatenate((np.zeros(1), -J[i])),
+    #     } for i in range(m)]
         
-        res = minimize(obj, x0=np.zeros(n+1), 
-                      constraints=constraints, 
-                      method='SLSQP',
-                    #   options={'ftol': 1e-8}
-        )
+    #     res = minimize(obj, x0=np.zeros(n+1), 
+    #                   constraints=constraints, 
+    #                   method='SLSQP',
+    #                 #   options={'ftol': 1e-8}
+    #     )
         
-        if not res.success:
-            # x = x + np.random.uniform(low=-0.1, high=0.1, size=n)
-            print(f"QP failed: {res.message}")
-            return np.zeros(n), 0.0
+    #     if not res.success:
+    #         # x = x + np.random.uniform(low=-0.1, high=0.1, size=n)
+    #         print(f"QP failed: {res.message}")
+    #         return np.zeros(n), 0.0
              
             
+    #     return res.x[1:], res.x[0]
+
+    def _compute_direction(self, J):
+        """Solve QP using trust-constr with explicit constraints"""
+        m, n = J.shape
+        eps = 1e-10  # Small regularization factor
+
+        # Define optimization variables: z = [α, v_1, ..., v_n]
+        dim = n + 1  # α + n variables
+
+        # Objective function: α + ½||v||² + ε(α² + ||v||²)
+        def objective(z):
+            alpha = z[0]
+            v = z[1:]
+            return alpha + 0.5 * v.dot(v) + eps * (alpha**2 + v.dot(v))
+
+        # Jacobian of objective
+        def jac(z):
+            grad = np.zeros_like(z)
+            grad[0] = 1 + 2*eps*z[0]
+            grad[1:] = z[1:] * (1 + 2*eps)
+            return grad
+
+        # Hessian of objective (constant for quadratic terms)
+        def hess(z):
+            H = np.diag(2*eps * np.ones(dim))
+            H[0, 0] = 2*eps  # α² term
+            H[1:, 1:] += np.eye(n)  # ||v||² term
+            return H
+
+        # Linear constraints: Jv - α ≤ 0 → [-1, J_i]·z ≤ 0
+        A = np.hstack([-np.ones((m, 1)), J])  # Constraint matrix
+        linear_constraints = LinearConstraint(
+            A, 
+            lb=-np.inf, 
+            ub=0.0
+        )
+
+        # Variable bounds (none for α, optional for v)
+        bounds = [
+            (-np.inf, np.inf)  # α
+        ] + [
+            (-1, 1) for _ in range(n)  # v
+        ]
+
+        # Initial guess
+        z0 = np.zeros(dim)
+
+        # Solve with trust-constr
+        res = minimize(
+            objective,
+            z0,
+            method='trust-constr',
+            jac=jac,
+            hess=hess,
+            constraints=[linear_constraints],
+            bounds=bounds,
+            options={'verbose': 0, 'gtol': 1e-9, 'xtol': 1e-9}
+        )
+
+        if not res.success:
+            return np.zeros(n), 0.0  # Fallback
+
         return res.x[1:], res.x[0]
 
     def _line_search(self, x, v, J):

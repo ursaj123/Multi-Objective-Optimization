@@ -12,7 +12,7 @@ sys.path.append(os.path.join('/'.join(os.path.dirname(__file__).split('/')[:-2])
 from problems import class_list
 from MOP_metrics import *
 from steepest_grad_desc import MultiObjectiveSteepestDescent
-from pareto_front_plots import plot_pareto_front
+from pareto_front_plots import plot_2d_pareto_front, plot_3d_pareto_front
 
 
 print(f"Problem list - {class_list.keys()}")
@@ -28,28 +28,30 @@ os.makedirs(os.path.join(os.path.dirname(__file__), 'results'), exist_ok=True)
 # we will be comparing the approximated answer of CIRCULAR problem with the original soln, if it lies in proximity,
 # then only we will proceed for the multiobjective optimization
 
-N, COND_NUM = [20, 30], [1e1, 1e2]
-# N, COND_NUM = [10], [1e2]
-for n, cond_num in product(N, COND_NUM):
-    print(f"{'-'*50}")
-    print(f"Problem - CIRCULAR, n = {n}, cond_num = {cond_num}")
-    problem = class_list['CIRCULAR'](n=n, cond_num=cond_num)
-    solver = MultiObjectiveSteepestDescent(
-        problem=problem,
-        beta=0.1,
-        sigma=0.1,
-        tol=1e-4,
-        max_iter=1000,
-    )
-    result = solver.solve(
-        x0=np.random.rand(n)
-    )
-    print(f"result = {result}")
-    print(f"Result Difference = {np.linalg.norm(result['x'] - problem.orig_soln)}")
+# N, COND_NUM = [20, 30], [1e1, 1e2, 1e3]
+# # N, COND_NUM = [10], [1e2]
+# for n, cond_num in product(N, COND_NUM):
+#     print(f"{'-'*50}")
+#     print(f"Problem - CIRCULAR, n = {n}, cond_num = {cond_num}")
+#     problem = class_list['CIRCULAR'](n=n, cond_num=cond_num)
+#     solver = MultiObjectiveSteepestDescent(
+#         problem=problem,
+#         beta=0.1,
+#         sigma=0.1,
+#         tol=1e-4,
+#         max_iter=1000,
+#     )
+#     result = solver.solve(
+#         x0=np.random.rand(n)
+#     )
+#     print(f"result = {result}")
+#     print(f"Result Difference = {np.linalg.norm(result['x'] - problem.orig_soln)}")
 
-    print(f"{'-'*50}")
+#     print(f"{'-'*50}")
 
-sys.exit()
+
+# # great, it works
+# sys.exit()
 ##################################################################################################
 
 
@@ -77,10 +79,15 @@ def calculate_metrics(Y_N, Y_P, ref_point=None, num_samples = 50):
         'Error_Ratio': error_ratio(Y_N, Y_P)
     }
 
+
 for key in class_list.keys():
+    if key=='CIRCULAR':
+        continue
+    # if key!="MOP5":
+    #     continue
     print(f"Problem - {key}")
 
-    num_samples = 50
+    num_samples = 100
     problem = class_list[key]()
     # print(problem.__class__.__name__)
 
@@ -109,12 +116,28 @@ for key in class_list.keys():
     # sys.exit()
 
     # plotting pareto front
-    plot_pareto_front(
-        Y_true=problem.true_pareto_front,
-        Y_approx=np.array([result['f'] for result in results]),
-        problem_name=problem.__class__.__name__, # later append all of the settings to the string also
-        save_path=os.path.join(os.path.dirname(__file__), "results", f"{problem.__class__.__name__}_pareto_front.png")
-    )
+    if problem.m==2:
+        plot_2d_pareto_front(
+            # Y_true=problem.true_pareto_front,
+            Y_true=[],
+            Y_approx=np.array([result['f'] for result in results]),
+            problem_name=problem.__class__.__name__, # later append all of the settings to the string also
+            save_path=os.path.join(os.path.dirname(__file__), "results", f"{problem.__class__.__name__}_pareto_front.png")
+        )
+    elif problem.m==3:
+        plot_3d_pareto_front(
+            f1_true=problem.true_pareto_front[:, 0],
+            f2_true=problem.true_pareto_front[:, 1],
+            f3_true=problem.true_pareto_front[:, 2],
+            f1_approx=np.array([result['f'][0] for result in results]),
+            f2_approx=np.array([result['f'][1] for result in results]),
+            f3_approx=np.array([result['f'][2] for result in results]),
+            elev=20, azim=-135,
+            color_true='black', color_approx='red',
+            label_true='True', label_approx='Approx',
+            point_size=5,
+            save_path=os.path.join(os.path.dirname(__file__), "results", f"{problem.__class__.__name__}_pareto_front.png")
+        )
 
 
 

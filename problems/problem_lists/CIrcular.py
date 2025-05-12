@@ -59,6 +59,3 @@ class CIRCULAR:
         return [
             (self.f1, self.grad_f1, self.hess_f1)
         ]
-
-
-
