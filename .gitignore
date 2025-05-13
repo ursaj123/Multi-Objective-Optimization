@@ -1,2 +1,2 @@
-*.png
-*__pycache__
+**/*.png
+**/__pycache__/
