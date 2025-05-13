@@ -22,6 +22,7 @@ def plot_2d_pareto_front(Y_true=None, Y_approx=None, problem_name='', save_path=
 
     if save_path:
         plt.savefig(save_path)
+    plt.close()
     
 
 
@@ -67,3 +68,5 @@ def plot_3d_pareto_front(f_true=None, f_approx=None,
     plt.show()
     if save_path:
         plt.savefig(save_path)
+
+    plt.close(fig)
