@@ -30,6 +30,15 @@ class JOS4:
         self.true_pareto_front = self.calculate_optimal_pareto_front()
         self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
 
+
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
+
     def calculate_optimal_pareto_front(self, num_points=100):
         """
         Calculate the optimal Pareto front.
@@ -256,12 +265,10 @@ class JOS4:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            # Example L1 norm constraint: sum of absolute values <= some_value
-            if 'value' not in self.g_type[1]:
-                raise ValueError("For L1 constraint, 'value' must be specified in g_type[1].")
-            value = self.g_type[1]['value']
-            g_values = np.array([np.sum(np.abs(z)) - value] * self.m)  # Repeat for each objective
-            return g_values
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif self.g_type[0] == 'indicator':
             # Example indicator constraint: check if z is within a certain region
             if 'lower_bound' not in self.g_type[1] or 'upper_bound' not in self.g_type[1]:

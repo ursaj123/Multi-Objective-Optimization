@@ -47,6 +47,14 @@ class LOV1:
         self.true_pareto_front = self.calculate_optimal_pareto_front()
         self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
 
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
+
     def calculate_optimal_pareto_front(self):
         """
         Approximate the Pareto front by sampling the decision space and
@@ -200,7 +208,10 @@ class LOV1:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            raise NotImplementedError("L1 norm for g is not implemented yet.")
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif self.g_type[0] == 'indicator':
             raise NotImplementedError("Indicator function for g is not implemented yet.")
         elif self.g_type[0] == 'max':

@@ -36,6 +36,14 @@ class LOV3:
         self.true_pareto_front = self._calculate_optimal_pareto_front()
         self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
 
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
+
     def _calculate_optimal_pareto_front(self):
         """
         Sampling the Pareto front using a non-dominated sorting approach.
@@ -43,7 +51,7 @@ class LOV3:
         ndim = self.n
         n_samples = 500
         X = np.random.uniform(self.lb, self.ub, (n_samples, ndim))
-        F = np.array([self._evaluate_f(x) for x in X])
+        F = np.array([self.evaluate_f(x) for x in X])
         is_nondominated = np.ones(n_samples, dtype=bool)
         for i in range(n_samples):
             for j in range(n_samples):
@@ -70,21 +78,23 @@ class LOV3:
     def hess_f2(self, x):
         return np.array([[-2, 0], [0, -2]])
 
-    def _evaluate_f(self, x):
+    def evaluate_f(self, x):
         return np.array([self.f1(x), self.f2(x)])
 
-    def _evaluate_gradients_f(self, x):
+    def evaluate_gradients_f(self, x):
         return np.array([self.grad_f1(x), self.grad_f2(x)])
 
-    def _evaluate_hessians_f(self, x):
+    def evaluate_hessians_f(self, x):
         return np.array([self.hess_f1(x), self.hess_f2(x)])
 
     def evaluate_g(self, z):
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            w = self.g_type[1].get('w', np.ones(self.m))
-            return np.sum(np.abs(z) * w)
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif self.g_type[0] == 'indicator':
             domain_check = self.g_type[1].get('domain', lambda z: True)
             return np.zeros(self.m) if domain_check(z) else np.inf * np.ones(self.m)
@@ -94,7 +104,7 @@ class LOV3:
             raise ValueError(f"Unknown g_type: {self.g_type[0]}")
 
     def evaluate(self, x, z):
-        f_values = self._evaluate_f(x)
+        f_values = self.evaluate_f(x)
         g_values = self.evaluate_g(z)
         return f_values + g_values
 

@@ -11,7 +11,7 @@ sys.path.append(os.path.join('/'.join(os.path.dirname(__file__).split('/')[:-2])
 
 from problems import class_list
 from MOP_metrics import *
-from steepest_grad_desc import MultiObjectiveSteepestDescent
+from newton import MultiObjectiveNewton
 from pareto_front_plots import plot_2d_pareto_front, plot_3d_pareto_front
 
 
@@ -28,30 +28,31 @@ os.makedirs(os.path.join(os.path.dirname(__file__), 'results'), exist_ok=True)
 # we will be comparing the approximated answer of CIRCULAR problem with the original soln, if it lies in proximity,
 # then only we will proceed for the multiobjective optimization
 
-# N, COND_NUM = [20, 30], [1e1, 1e2, 1e3]
-# # N, COND_NUM = [10], [1e2]
-# for n, cond_num in product(N, COND_NUM):
-#     print(f"{'-'*50}")
-#     print(f"Problem - CIRCULAR, n = {n}, cond_num = {cond_num}")
-#     problem = class_list['CIRCULAR'](n=n, cond_num=cond_num)
-#     solver = MultiObjectiveSteepestDescent(
-#         problem=problem,
-#         beta=0.1,
-#         sigma=0.1,
-#         tol=1e-4,
-#         max_iter=1000,
-#     )
-#     result = solver.solve(
-#         x0=np.random.rand(n)
-#     )
-#     print(f"result = {result}")
-#     print(f"Result Difference = {np.linalg.norm(result['x'] - problem.orig_soln)}")
+N, COND_NUM = [20, 30], [1e1, 1e2, 1e3]
+N, COND_NUM = [10], [1e0]
+for n, cond_num in product(N, COND_NUM):
+    print(f"{'-'*50}")
+    print(f"Problem - CIRCULAR, n = {n}, cond_num = {cond_num}")
+    problem = class_list['CIRCULAR'](n=n, cond_num=cond_num)
+    solver = MultiObjectiveNewton(
+        problem=problem,
+        sigma=0.1,
+        tol_theta=1e-4,
+        max_iters=100,
+        verbose=True,
+        subproblem_solver = 'trust-constr'
+    )
+    result = solver.solve(
+        x0 = np.random.rand(problem.n)
+    )
+    print(f"result = {result}")
+    print(f"Result Difference = {np.linalg.norm(result['x'] - problem.orig_soln)}")
 
-#     print(f"{'-'*50}")
+    print(f"{'-'*50}")
 
 
-# # great, it works
-# sys.exit()
+# great, it works
+sys.exit()
 ##################################################################################################
 
 
@@ -96,12 +97,13 @@ for key in problem_lists:
     problem = class_list[key]()
     # print(problem.__class__.__name__)
 
-    solver = MultiObjectiveSteepestDescent(
+    solver = MultiObjectiveNewton(
         problem=problem,
-        beta=0.1,
         sigma=0.1,
-        tol=1e-4,
-        max_iter=100,
+        tol_theta=1e-4,
+        max_iters=100,
+        verbose=True,
+        subproblem_solver = 'trust-constr'
     )
     results = []
     for i in range(num_samples):

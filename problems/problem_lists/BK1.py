@@ -24,7 +24,7 @@ class BK1:
         self.n = n
         self.lb = lb
         self.ub = ub
-        self.bounds = tuple([(lb, ub) for _ in range(n)])
+        self.bounds = [(lb, ub) for _ in range(n)]
         self.constraints = []
         self.g_type = g_type
         self.true_pareto_front = self.calculate_optimal_pareto_front()

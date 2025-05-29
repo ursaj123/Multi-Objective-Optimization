@@ -1,11 +1,11 @@
 import numpy as np
 
-class JOS1:
-    def __init__(self, n=4, lb=-5, ub = 5, g_type = ('zero', {})):
+class DUMMY1:
+    def __init__(self, n=1, lb=-5, ub = 5, g_type = ('zero', {})):
         r"""
         JOS1 Problem
-        f_1(x) = 0.5 * \|x\|^2
-        f_2(x) = 0.5 * \|x - 2\|^2
+        f_1(x) = x**2
+        f_2(x) = (x-2)**2
 
         g_1(z) = zero/L1/indicator/max
         g_2(z) = zero/L1/indicator/max
@@ -31,21 +31,15 @@ class JOS1:
 
         self.m = 2  # Number of objectives
         self.n = n
-        self.bounds = [(-5, 5) for _ in range(n)] # Assuming 2 variables for JOS1
+        self.lb = lb
+        self.ub = ub
+        self.bounds = [(lb, ub) for _ in range(n)] # Assuming 2 variables for JOS1
         self.constraints = []
         self.g_type = g_type
         self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
-
-
-        self.l1_ratios, self.l1_shifts = [], []
-        if self.g_type[0]=='L1':
-            for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
-                self.l1_shifts.append(i)
-            self.l1_ratios = np.array(self.l1_ratios)
-            self.l1_shifts = np.array(self.l1_shifts)
-            
+        # print(f"true_pareto_front: {self.true_pareto_front}")
+        self.ref_point = np.max(self.true_pareto_front, axis=0)
+        # print(f"ref_point: {self.ref_point}")
 
         # print(self.bounds)
 
@@ -55,26 +49,30 @@ class JOS1:
         f_1(x) = 0.5 * \|x\|^2
         f_2(x) = 0.5 * \|x - 2\|^2
         """
-        return np.array([[1.0, 1.0], [4.0, 0.0], [0.0, 4.0]])
+        x = np.linspace(0, 2, 100)
+        list_ = []
+        for i in x:
+            list_.append(self.evaluate(i, i))
+        return np.array(list_)
     
 
     def f1(self, x):
-        return 0.5 * np.sum(x**2)
+        return x**2
 
     def grad_f1(self, x):
-        return x
+        return 2*x
 
     def f2(self, x):
-        return 0.5 * np.sum((x - 2)**2)
+        return (x - 2)**2
 
     def grad_f2(self, x):
-        return x - 2
+        return 2*(x - 2)
 
     def hess_f1(self, x):
-        return np.eye(self.n)
+        return 2*np.eye(self.n)
 
     def hess_f2(self, x):
-        return np.eye(self.n)
+        return 2*np.eye(self.n)
 
     def evaluate_f(self, x):
         return np.array([self.f1(x), self.f2(x)])
@@ -89,10 +87,7 @@ class JOS1:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            res = np.zeros(self.m)
-            for i in range(self.m):
-                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
-            return res
+            pass
         elif self.g_type[0] == 'indicator':
             pass
         else:

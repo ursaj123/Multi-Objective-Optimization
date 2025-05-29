@@ -5,7 +5,7 @@ class IKK1:
         """
         IKK1 Problem
         f_1(x_1) = x_1^2
-        f_2(x_1) = (x_1 - 20)^2
+        f_2(x_1) = (x_1 - 2)^2
         f_3(x_2) = x_2^2
 
         g_1(z) = zero/L1/indicator/max
@@ -23,11 +23,19 @@ class IKK1:
         """
         self.m = 3  # Number of objectives
         self.n = 2  # Number of variables
-        self.bounds = [(-50, 50), (-50, 50)]  # x1, x2
+        self.bounds = [(-2, 2), (-2, 2)]  # x1, x2
         self.constraints = []
         self.g_type = g_type
         self.true_pareto_front = self.calculate_optimal_pareto_front()
         self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
 
     def calculate_optimal_pareto_front(self, num_points=100):
         """
@@ -36,7 +44,7 @@ class IKK1:
         """
         x1_values = np.linspace(-50, 50, num_points)
         f1_values = x1_values**2
-        f2_values = (x1_values - 20)**2
+        f2_values = (x1_values - 2)**2
         f3_values = np.zeros_like(x1_values)  # x2 = 0
         pareto_front = np.column_stack([f1_values, f2_values, f3_values])
         return pareto_front
@@ -48,10 +56,10 @@ class IKK1:
         return np.array([2 * x[0], 0])
 
     def f2(self, x):
-        return (x[0] - 20)**2
+        return (x[0] - 2)**2
 
     def grad_f2(self, x):
-        return np.array([2 * (x[0] - 20), 0])
+        return np.array([2 * (x[0] - 2), 0])
 
     def f3(self, x):
         return x[1]**2
@@ -81,7 +89,10 @@ class IKK1:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            pass
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif self.g_type[0] == 'indicator':
             pass
         elif self.g_type[0] == 'max':

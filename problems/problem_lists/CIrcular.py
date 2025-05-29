@@ -4,8 +4,6 @@ class CIRCULAR:
     def __init__(self, n=10, cond_num=1e2, lb = -1000, ub = 1000, g_type=('zero', {})):
         self.m = 1
         self.n = n
-        self.lb = -np.inf
-        self.ub = np.inf
         self.bounds = None
         self.g_type = g_type
         self.cond_num = cond_num

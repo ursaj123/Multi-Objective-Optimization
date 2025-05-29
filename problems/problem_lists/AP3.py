@@ -23,11 +23,19 @@ class AP3:
         self.n = 2  # Fixed at 2 for this problem
         self.lb = lb
         self.ub = ub
-        self.bounds = tuple([(lb, ub) for _ in range(self.n)])
+        self.bounds = [(lb, ub) for _ in range(self.n)]
         self.constraints = []
         self.g_type = g_type
         self.true_pareto_front = self.calculate_optimal_pareto_front()
         self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0] == 'L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1 / ((i + 1) * self.m))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
 
     def calculate_optimal_pareto_front(self):
         """
@@ -96,6 +104,10 @@ class AP3:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
             # Implement L1 regularization when needed
             # This would depend on parameters in self.g_type[1]
             pass

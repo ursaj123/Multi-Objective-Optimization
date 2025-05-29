@@ -3,6 +3,9 @@ import numpy as np
 class FDS:
     def __init__(self, n=10, g_type=('zero', {})):
         """
+        Correct its pareto front code
+
+        
         FDS Problem (variable dimension)
         F_1(x) = (1 / n^2) * sum(k * (x_k - k)^4) for k = 1 to n
         F_2(x) = exp((1 / n) * sum(x_k)) + ||x||^2
@@ -21,11 +24,19 @@ class FDS:
         """
         self.m = 3  # Number of objectives
         self.n = n  # Number of variables
-        self.bounds = [(-100, 100)] * n  # Default bounds, you might need to adjust
+        self.bounds = [(-1, 1)] * n  # Default bounds, you might need to adjust
         self.constraints = []
         self.g_type = g_type
         self.true_pareto_front = self.calculate_optimal_pareto_front()
         self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
 
     def calculate_optimal_pareto_front(self, num_points=500):
         """
@@ -34,6 +45,7 @@ class FDS:
         """
         # Create sample points.  A more sophisticated sampling method
         # (like Latin Hypercube) would be better in higher dimensions.
+        return np.array([1.0, 1.0, 1.0])  # Placeholder for the true Pareto front
         x_samples = np.linspace(-5, 5, num_points)  # Range for each x_k
         # Initialize an array to hold the objective values
         f_values = np.zeros((num_points*self.n, self.m))
@@ -65,7 +77,10 @@ class FDS:
 
         if self.n <= 4: #and X is not None:
             # Evaluate the objectives for each combination of x_k
+            
             x_combinations = np.array(X).T
+            print(x_combinations.shape)
+            print(x_combinations[0])
             for i, x in enumerate(x_combinations):
                 f_values[i] = self.evaluate_f(x)
             points = f_values
@@ -136,7 +151,10 @@ class FDS:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            pass
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif self.g_type[0] == 'indicator':
             pass
         elif self.g_type[0] == 'max':

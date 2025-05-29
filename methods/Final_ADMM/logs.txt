@@ -1,0 +1,302 @@
+Initial x: [-2.65735412 -4.06196869], Initial z: [-2.65735412 -4.06196869]
+
+Primal residual: 9.362173080444336, Dual residual: 4.508493900299072, inner iteration: 1
+d_x_new: [2.65735416 4.06196875], d_z = [0. 0.], d_z_new: [-2.4073586 -3.811973 ]
+
+Primal residual: 1.0606521368026733, Dual residual: 3.481748342514038, inner iteration: 2
+d_x_new: [8.91368703e-08 1.36252513e-07], d_z = [-2.4073586 -3.811973 ], d_z_new: [-0.7499943 -0.7499943]
+
+Primal residual: 1.974897969603262e-07, Dual residual: 1.0606526136398315, inner iteration: 3
+d_x_new: [1.87175065e-07 2.86111380e-07], d_z = [-0.7499943 -0.7499943], d_z_new: [2.3841858e-07 4.7683716e-07]
+
+Primal residual: 2.4027400513659813e-07, Dual residual: 0.18682731688022614, inner iteration: 4
+d_x_new: [ 0.14974844 -0.11171314], d_z = [2.3841858e-07 4.7683716e-07], d_z_new: [ 0.14974856 -0.11171293]
+
+Primal residual: 7.016611789367744e-07, Dual residual: 0.038420215249061584, inner iteration: 5
+d_x_new: [ 0.1113298  -0.11132912], d_z = [ 0.14974856 -0.11171293], d_z_new: [ 0.11133027 -0.1113286 ]
+
+Primal residual: 2.6362846483607427e-07, Dual residual: 0.039413515478372574, inner iteration: 6
+d_x_new: [ 0.15072818 -0.11244422], d_z = [ 0.11133027 -0.1113286 ], d_z_new: [ 0.15072799 -0.1124444 ]
+
+Primal residual: 7.62939453125e-06, Dual residual: 130.31622314453125, inner iteration: 7
+d_x_new: [ 71.33634719 109.0430641 ], d_z = [ 0.15072799 -0.1124444 ], d_z_new: [ 71.33634 109.04306]
+
+Primal residual: 0.0, Dual residual: 24.04349708557129, inner iteration: 8
+d_x_new: [ 84.49917719 129.16344452], d_z = [ 71.33634 109.04306], d_z_new: [ 84.499176 129.16344 ]
+
+Primal residual: 0.001953125, Dual residual: 59465.99609375, inner iteration: 9
+d_x_new: [32548.2394569  49951.95522268], d_z = [ 84.499176 129.16344 ], d_z_new: [32548.238 49951.957]
+
+Primal residual: 0.0019605159759521484, Dual residual: 59620.34375, inner iteration: 10
+d_x_new: [0. 0.], d_z = [32548.238 49951.957], d_z_new: [ 1.9605160e-03 -4.7683716e-07]
+
+Primal residual: 9.09459288322978e-07, Dual residual: 0.18524721264839172, inner iteration: 11
+d_x_new: [ 0.14973827 -0.1117054 ], d_z = [ 1.9605160e-03 -4.7683716e-07], d_z_new: [ 0.14973855 -0.11170626]
+
+Primal residual: 0.0009765625, Dual residual: 16851.2578125, inner iteration: 12
+d_x_new: [ 9225.36319418 14101.67226837], d_z = [ 0.14973855 -0.11170626], d_z_new: [ 9225.363 14101.673]
+
+Primal residual: 0.0009760857210494578, Dual residual: 16851.248046875, inner iteration: 13
+d_x_new: [0. 0.], d_z = [ 9225.363 14101.673], d_z_new: [-2.3841858e-07 -9.7608566e-04]
+
+Primal residual: 6.103515625e-05, Dual residual: 1035.8946533203125, inner iteration: 14
+d_x_new: [567.10918555 866.86971959], d_z = [-2.3841858e-07 -9.7608566e-04], d_z_new: [567.1092  866.86975]
+
+Primal residual: 0.00390625, Dual residual: 58961.5859375, inner iteration: 15
+d_x_new: [32844.52612266 50208.90566753], d_z = [567.1092  866.86975], d_z_new: [32844.53  50208.906]
+
+Primal residual: 0.0039064958691596985, Dual residual: 59997.48046875, inner iteration: 16
+d_x_new: [0. 0.], d_z = [32844.53  50208.906], d_z_new: [-3.9060116e-03 -6.1511993e-05]
+
+Primal residual: 0.0, Dual residual: 120575.5859375, inner iteration: 17
+d_x_new: [ 66010.1677315  100901.58286345], d_z = [-3.9060116e-03 -6.1511993e-05], d_z_new: [ 66010.164 100901.586]
+
+Primal residual: 5.331201577973843e-07, Dual residual: 120575.5859375, inner iteration: 18
+d_x_new: [0. 0.], d_z = [ 66010.164 100901.586], d_z_new: [ 2.3841858e-07 -4.7683716e-07]
+
+Primal residual: 7.545345397375058e-07, Dual residual: 0.18682731688022614, inner iteration: 19
+d_x_new: [ 0.14974844 -0.11171314], d_z = [ 2.3841858e-07 -4.7683716e-07], d_z_new: [ 0.14974856 -0.11171389]
+
+Primal residual: 3.4119690099032596e-05, Dual residual: 379.5495300292969, inner iteration: 20
+d_x_new: [207.78141729 317.60978677], d_z = [ 0.14974856 -0.11171389], d_z_new: [207.78143 317.60974]
+
+Primal residual: 0.0, Dual residual: 145.36398315429688, inner iteration: 21
+d_x_new: [287.36222737 439.25505737], d_z = [207.78143 317.60974], d_z_new: [287.3622  439.25507]
+
+Primal residual: 6.103515625e-05, Dual residual: 247.03562927246094, inner iteration: 22
+d_x_new: [422.60403914 645.98251341], d_z = [287.3622  439.25507], d_z_new: [422.60403 645.98254]
+
+x-subproblem failed to converge
+Primal residual: 0.001953125, Dual residual: 27568.27734375, inner iteration: 23
+d_x_new: [15569.48915002 23680.34537496], d_z = [422.60403 645.98254], d_z_new: [15569.489 23680.344]
+
+Primal residual: 0.001923142932355404, Dual residual: 28340.212890625, inner iteration: 24
+d_x_new: [0. 0.], d_z = [15569.489 23680.344], d_z_new: [-1.50203705e-05  1.92308426e-03]
+
+Primal residual: 0.0, Dual residual: 43.162723541259766, inner iteration: 25
+d_x_new: [23.63069135 36.12131661], d_z = [-1.50203705e-05  1.92308426e-03], d_z_new: [23.630692 36.121315]
+
+Primal residual: 6.103515625e-05, Dual residual: 586.9476318359375, inner iteration: 26
+d_x_new: [ 23.69177917 623.06893849], d_z = [23.630692 36.121315], d_z_new: [ 23.69178 623.069  ]
+
+Primal residual: 0.999755859375, Dual residual: 55906.015625, inner iteration: 27
+d_x_new: [-3592.61353108 56412.07062815], d_z = [ 23.69178 623.069  ], d_z_new: [-3591.6138 56412.07  ]
+
+Primal residual: 0.999755859375, Dual residual: 56526.2265625, inner iteration: 28
+d_x_new: [0. 0.], d_z = [-3591.6138 56412.07  ], d_z_new: [-9.9975586e-01 -6.1511993e-05]
+
+Primal residual: 5.489717977980035e-07, Dual residual: 1.1610687971115112, inner iteration: 29
+d_x_new: [ 0.1555082  -0.11601632], d_z = [-9.9975586e-01 -6.1511993e-05], d_z_new: [ 0.15550828 -0.11601686]
+
+Primal residual: 1.043081283569336e-07, Dual residual: 675.4518432617188, inner iteration: 30
+d_x_new: [6.75607391e+02 6.17336170e-02], d_z = [ 0.15550828 -0.11601686], d_z_new: [6.7560736e+02 6.1733723e-02]
+
+Primal residual: 0.001953125, Dual residual: 58971.4375, inner iteration: 31
+d_x_new: [32485.14032526 49656.72544307], d_z = [6.7560736e+02 6.1733723e-02], d_z_new: [32485.139 49656.727]
+
+Primal residual: 0.0019533634185791016, Dual residual: 59338.64453125, inner iteration: 32
+d_x_new: [0. 0.], d_z = [32485.139 49656.727], d_z_new: [1.9533634e-03 4.7683716e-07]
+
+Primal residual: 3.4119690099032596e-05, Dual residual: 379.4691467285156, inner iteration: 33
+d_x_new: [207.74433967 317.55308491], d_z = [1.9533634e-03 4.7683716e-07], d_z_new: [207.74435 317.55304]
+
+Primal residual: 0.0, Dual residual: 145.43173217773438, inner iteration: 34
+d_x_new: [287.36222737 439.25505737], d_z = [207.74435 317.55304], d_z_new: [287.3622  439.25507]
+
+Primal residual: 6.103515625e-05, Dual residual: 247.03562927246094, inner iteration: 35
+d_x_new: [422.60403914 645.98251341], d_z = [287.3622  439.25507], d_z_new: [422.60403 645.98254]
+
+Primal residual: 0.001953125, Dual residual: 23484.330078125, inner iteration: 36
+d_x_new: [13415.04553336 20208.96421734], d_z = [422.60403 645.98254], d_z_new: [13415.046 20208.963]
+
+Primal residual: 0.0019221892580389977, Dual residual: 24256.248046875, inner iteration: 37
+d_x_new: [0. 0.], d_z = [13415.046 20208.963], d_z_new: [-1.50203705e-05  1.92213058e-03]
+
+Primal residual: 6.795975195927895e-07, Dual residual: 0.18796280026435852, inner iteration: 38
+d_x_new: [ 0.14972264 -0.1116932 ], d_z = [-1.50203705e-05  1.92213058e-03], d_z_new: [ 0.14972281 -0.11169386]
+
+Primal residual: 2.411907189525664e-07, Dual residual: 240.0924835205078, inner iteration: 39
+d_x_new: [3.24221534e-05 2.39980750e+02], d_z = [ 0.14972281 -0.11169386], d_z_new: [3.2663345e-05 2.3998074e+02]
+
+Primal residual: 0.00390625, Dual residual: 102163.0390625, inner iteration: 40
+d_x_new: [56040.13340529 85661.23143807], d_z = [3.2663345e-05 2.3998074e+02], d_z_new: [56040.137 85661.234]
+
+Primal residual: 0.0039064884185791016, Dual residual: 102363.78125, inner iteration: 41
+d_x_new: [0. 0.], d_z = [56040.137 85661.234], d_z_new: [-3.9064884e-03  4.7683716e-07]
+
+Primal residual: 5.360825525713153e-07, Dual residual: 0.003908634651452303, inner iteration: 42
+d_x_new: [1.85392539e-06 2.83386652e-06], d_z = [-3.9064884e-03  4.7683716e-07], d_z_new: [2.1457672e-06 2.3841858e-06]
+
+Primal residual: 6.103557825554162e-05, Dual residual: 623.5867919921875, inner iteration: 43
+d_x_new: [1.19108589e-05 6.23586760e+02], d_z = [2.1457672e-06 2.3841858e-06], d_z_new: [1.168251e-05 6.235868e+02]
+
+Primal residual: 0.00390625, Dual residual: 71229.53125, inner iteration: 44
+d_x_new: [35813.36108913 62195.0796738 ], d_z = [1.168251e-05 6.235868e+02], d_z_new: [35813.363 62195.08 ]
+
+Primal residual: 0.003906972706317902, Dual residual: 71769.25, inner iteration: 45
+d_x_new: [0. 0.], d_z = [35813.363 62195.08 ], d_z_new: [-3.9064884e-03 -6.1511993e-05]
+
+Primal residual: 5.364025810195017e-07, Dual residual: 0.003943468909710646, inner iteration: 46
+d_x_new: [3.62122296e-05 1.89642069e-06], d_z = [-3.9064884e-03 -6.1511993e-05], d_z_new: [3.6478043e-05 1.4305115e-06]
+
+Primal residual: 5.659545081471151e-07, Dual residual: 3.6765970435226336e-05, inner iteration: 47
+d_x_new: [1.80893163e-08 2.76509012e-08], d_z = [3.6478043e-05 1.4305115e-06], d_z_new: [-2.3841858e-07 -4.7683716e-07]
+
+Primal residual: 8.529922524758149e-06, Dual residual: 95.05583190917969, inner iteration: 48
+d_x_new: [52.03914818 79.54581156], d_z = [-2.3841858e-07 -4.7683716e-07], d_z_new: [52.03915 79.54582]
+
+Primal residual: 0.0, Dual residual: 16.445592880249023, inner iteration: 49
+d_x_new: [61.04240573 93.30804884], d_z = [52.03915 79.54582], d_z_new: [61.042404 93.30805 ]
+
+Primal residual: 0.001953125, Dual residual: 59417.390625, inner iteration: 50
+d_x_new: [32549.13423691 49842.17951857], d_z = [61.042404 93.30805 ], d_z_new: [32549.133 49842.18 ]
+
+
+
+
+
+
+
+x_new: [-0.67071263 -1.01984348], z_new: [-0.6707127 -1.0198436], t: 6.103515625e-05, global_res: 3.6333552328046252
+
+Primal residual: 2.096238374710083, Dual residual: 0.8773079514503479, inner iteration: 1
+d_x_new: [0.67071263 1.01984347], d_z = [0. 0.], d_z_new: [-0.4207173  -0.76984817]
+
+Primal residual: 0.7239841222763062, Dual residual: 0.27356934547424316, inner iteration: 2
+d_x_new: [3.04598332e-08 4.63153085e-08], d_z = [-0.4207173  -0.76984817], d_z_new: [-0.511934   -0.51193404]
+
+Primal residual: 0.3366634249687195, Dual residual: 0.38732069730758667, inner iteration: 3
+d_x_new: [5.65585860e-08 8.59994319e-08], d_z = [-0.511934   -0.51193404], d_z_new: [-0.23805696 -0.2380569 ]
+
+Primal residual: 3.1704084904049523e-06, Dual residual: 0.3366612195968628, inner iteration: 4
+d_x_new: [4.61180963e-08 7.01242793e-08], d_z = [-0.23805696 -0.2380569 ], d_z_new: [ 1.1920929e-07 -3.0994415e-06]
+
+Primal residual: 7.601439477866734e-08, Dual residual: 3.337860107421875e-06, inner iteration: 5
+d_x_new: [1.07412764e-07 1.63325099e-07], d_z = [ 1.1920929e-07 -3.0994415e-06], d_z_new: [1.1920929e-07 2.3841858e-07]
+
+Primal residual: 1.5615498227816715e-08, Dual residual: 2.6656007889869215e-07, inner iteration: 6
+d_x_new: [8.58041885e-09 1.30468457e-08], d_z = [1.1920929e-07 2.3841858e-07], d_z_new: [0. 0.]
+
+SubADMM converged at inner iteration 5
+x_new: [-0.67071262 -1.01984347], z_new: [-0.6707127 -1.0198436], t: 1.0, global_res: 1.5615497850867016e-08
+
+Global convergence at iteration 2
+{'x': array([-0.67071262, -1.01984347]), 'z': Array([-0.6707127, -1.0198436], dtype=float32), 'f_val': array([0.74496806, 8.12608024]), 'g_val': array([0.84527814, 0.92263907]), 'f': array([1.5902462 , 9.04871931]), 'iterations': 1, 'residual': 1.5615497850867016e-08, 'runtime': 5.016578435897827}
+--------------------------------------------------
+
+
+
+
+
+
+
+
+
+# apparently d_z stops to update on the subadmm iterations but due to this lambda_new keeps on increasing 
+# more and more thus creating problems
+
+temp_with_norm_constraint_Linf_g_type_('L1', {})_n=2
+--------------------Sample 1/100--------------------
+No GPU/TPU found, falling back to CPU. (Set TF_CPP_MIN_LOG_LEVEL=0 and rerun for more info.)
+inner iteration: 1
+lambda_new: [5.314708 6.719323] d_x_new: [1. 1.], d_z = [0. 0.], d_z_new: [-4.314708 -5.719323], Primal residual: 8.567112922668457, Dual residual: 7.16431188583374
+inner iteration: 2
+lambda_new: [ 9.629416 12.438646] d_x_new: [2.93044952e-08 4.47941586e-08], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 3
+lambda_new: [13.944126 18.15797 ] d_x_new: [1.00567150e-06 1.47218358e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164313793182373, Dual residual: 0.0
+inner iteration: 4
+lambda_new: [18.258835 23.877293] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 5
+lambda_new: [22.573544 29.596615] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 6
+lambda_new: [26.888252 35.315937] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 7
+lambda_new: [31.202961 41.03526 ] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 8
+lambda_new: [35.51767  46.754585] d_x_new: [1.72290266e-06 2.58073064e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643147468566895, Dual residual: 0.0
+inner iteration: 9
+lambda_new: [39.832382 52.47391 ] d_x_new: [3.63289854e-06 4.49072488e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164317607879639, Dual residual: 0.0
+inner iteration: 10
+lambda_new: [44.14709  58.193237] d_x_new: [1.72290266e-06 2.58073064e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643147468566895, Dual residual: 0.0
+inner iteration: 11
+lambda_new: [48.4618   63.912563] d_x_new: [1.72290266e-06 2.58073064e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643147468566895, Dual residual: 0.0
+inner iteration: 12
+lambda_new: [52.776512 69.63189 ] d_x_new: [4.72289449e-06 5.58071990e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643195152282715, Dual residual: 0.0
+inner iteration: 13
+lambda_new: [57.09122 75.35121] d_x_new: [1.72290266e-06 2.58073064e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643147468566895, Dual residual: 0.0
+inner iteration: 14
+lambda_new: [61.405933 81.07054 ] d_x_new: [5.72288976e-06 6.58071431e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164320945739746, Dual residual: 0.0
+inner iteration: 15
+lambda_new: [65.72064 86.78987] d_x_new: [3.72289821e-06 4.58072448e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164318084716797, Dual residual: 0.0
+inner iteration: 16
+lambda_new: [70.03535 92.50919] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 17
+lambda_new: [74.35006  98.228516] d_x_new: [1.72290266e-06 2.58073064e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643147468566895, Dual residual: 0.0
+inner iteration: 18
+lambda_new: [ 78.66477  103.947845] d_x_new: [6.59161063e-06 1.00229226e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164323806762695, Dual residual: 0.0
+inner iteration: 19
+lambda_new: [ 82.979485 109.66717 ] d_x_new: [1.72290266e-06 2.58073064e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643147468566895, Dual residual: 0.0
+inner iteration: 20
+lambda_new: [ 87.2942 115.3865] d_x_new: [6.59161063e-06 1.00229226e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164323806762695, Dual residual: 0.0
+inner iteration: 21
+lambda_new: [ 91.6089  121.10582] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 22
+lambda_new: [ 95.92361 126.82514] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 23
+lambda_new: [100.23832 132.54446] d_x_new: [5.72288976e-06 6.58071431e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164320945739746, Dual residual: 0.0
+inner iteration: 24
+lambda_new: [104.553024 138.2638  ] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 25
+lambda_new: [108.867744 143.98312 ] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 26
+lambda_new: [113.18245 149.70245] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 27
+lambda_new: [117.497154 155.42178 ] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 28
+lambda_new: [121.81186 161.14111] d_x_new: [1.08193521e-07 1.65382059e-07], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.16431188583374, Dual residual: 0.0
+inner iteration: 29
+lambda_new: [126.12658 166.86044] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 30
+lambda_new: [130.44128 172.57977] d_x_new: [3.72289821e-06 4.58072448e-06], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164318084716797, Dual residual: 0.0
+inner iteration: 31
+lambda_new: [134.756  178.2991] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 32
+lambda_new: [139.07071 184.01843] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 33
+lambda_new: [143.38542 189.73776] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 34
+lambda_new: [147.70013 195.45709] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 35
+lambda_new: [152.01485 201.17644] d_x_new: [1.14603186e-05 1.74651145e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164332866668701, Dual residual: 0.0
+inner iteration: 36
+lambda_new: [156.32957 206.89578] d_x_new: [2.03289553e-05 2.89072007e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164347171783447, Dual residual: 0.0
+inner iteration: 37
+lambda_new: [160.6443  212.61513] d_x_new: [2.03289553e-05 2.89072007e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164347171783447, Dual residual: 0.0
+inner iteration: 38
+lambda_new: [164.95901 218.33446] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 39
+lambda_new: [169.27373 224.05379] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 40
+lambda_new: [173.58846 229.77313] d_x_new: [2.03289553e-05 2.89072007e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164347171783447, Dual residual: 0.0
+inner iteration: 41
+lambda_new: [177.90318 235.49248] d_x_new: [2.03289553e-05 2.89072007e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164347171783447, Dual residual: 0.0
+inner iteration: 42
+lambda_new: [182.2179  241.21182] d_x_new: [1.14603186e-05 1.74651145e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164332866668701, Dual residual: 0.0
+inner iteration: 43
+lambda_new: [186.53262 246.93118] d_x_new: [2.73288370e-05 3.59070224e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643571853637695, Dual residual: 0.0
+inner iteration: 44
+lambda_new: [190.84734 252.65051] d_x_new: [1.05915783e-05 1.40228765e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.1643290519714355, Dual residual: 0.0
+inner iteration: 45
+lambda_new: [195.16206 258.36987] d_x_new: [2.63288633e-05 3.49070573e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164355278015137, Dual residual: 0.0
+inner iteration: 46
+lambda_new: [199.47679 264.0892 ] d_x_new: [1.54602668e-05 2.14650386e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164338111877441, Dual residual: 0.0
+inner iteration: 47
+lambda_new: [203.7915  269.80853] d_x_new: [1.14603186e-05 1.74651145e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164332866668701, Dual residual: 0.0
+inner iteration: 48
+lambda_new: [208.10623 275.52786] d_x_new: [1.54602668e-05 2.14650386e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164338111877441, Dual residual: 0.0
+inner iteration: 49
+lambda_new: [212.42096 281.2472 ] d_x_new: [1.54602668e-05 2.14650386e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164338111877441, Dual residual: 0.0
+inner iteration: 50
+lambda_new: [216.73567 286.96652] d_x_new: [1.14603186e-05 1.74651145e-05], d_z = [-4.314708 -5.719323], d_z_new: [-4.314708 -5.719323], Primal residual: 7.164332866668701, Dual residual: 0.0
+inner iteration: 1
+lambda_new: [13.944124 16.753353] d_x_new: [1. 1.], d_z = [0. 0.], d_z_new: [-12.944124 -15.753354], Primal residual: 21.797096252441406, Dual residual: 20.389175415039062

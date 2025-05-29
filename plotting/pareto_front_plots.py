@@ -29,7 +29,7 @@ def plot_2d_pareto_front(Y_true=None, Y_approx=None, problem_name='', save_path=
 
 def plot_3d_pareto_front(f_true=None, f_approx=None,
                           problem_name='',
-                          elev=20, azim=135,
+                          elev=20, azim=-93,
                           color_true='black', color_approx='red',
                           label_true='True', label_approx='Approx',
                           point_size=5,
