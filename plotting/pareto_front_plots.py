@@ -3,21 +3,29 @@ import matplotlib.pyplot as plt
 from matplotlib import style
 from mpl_toolkits.mplot3d import Axes3D
 import os
-style.use('ggplot')
+# rc("text", usetex=True)
+# style.use(["science", "bright"])
 
-def plot_2d_pareto_front(Y_true=None, Y_approx=None, problem_name='', save_path=None):
+
+def plot_2d_pareto_front(Y_true=None, Y_approx=None, initial_points = None, problem_name='', save_path=None, alpha=0.05):
     """Plot true and approximated Pareto fronts"""
     plt.figure(figsize=(10, 6))
     if Y_true is not None:
-        plt.scatter(Y_true[:, 0], Y_true[:, 1], c='blue', label='True Pareto Front')
+        plt.scatter(Y_true[:, 0], Y_true[:, 1], c='lightgrey', label='Feasible Space', s=10)
     if Y_approx is not None:
-        plt.scatter(Y_approx[:, 0], Y_approx[:, 1], c='red', marker='x', label='Approximation')
+        plt.scatter(Y_approx[:, 0], Y_approx[:, 1], facecolor='green',marker='o', s=3, label='Approximate Pareto Front')
 
-    plt.xlabel('Objective 1')
-    plt.ylabel('Objective 2')
-    plt.title(f'Pareto Front Comparison {problem_name}')
+    if initial_points is not None and Y_approx is not None:
+        plt.scatter(initial_points[:, 0], initial_points[:, 1], s=3, facecolor='cyan', marker='o', label='Initial Points')
+        for start, end in zip(initial_points, Y_approx):
+            plt.plot([start[0], end[0]], [start[1], end[1]], color='magenta', linewidth=0.5, alpha=0.6)
+
+
+    plt.xlabel('f1')
+    plt.ylabel('f2')
+    plt.title(f'Pareto Front {problem_name}')
     plt.legend()
-    plt.grid(True)
+    plt.grid(False)
     plt.show()
 
     if save_path:
@@ -28,12 +36,10 @@ def plot_2d_pareto_front(Y_true=None, Y_approx=None, problem_name='', save_path=
 
 
 def plot_3d_pareto_front(f_true=None, f_approx=None,
-                          problem_name='',
-                          elev=20, azim=-93,
-                          color_true='black', color_approx='red',
-                          label_true='True', label_approx='Approx',
-                          point_size=5,
-                          save_path=None):
+                        problem_name='',
+                        elev=20, azim=-130,
+                        initial_points=None,
+                        save_path=None):
     """
     Plots two 3D scatter plots in the same figure with custom orientation.
 
@@ -51,20 +57,31 @@ def plot_3d_pareto_front(f_true=None, f_approx=None,
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
 
-    if f_true is not None:
-        ax.scatter(f_true[:, 0], f_true[:, 1], f_true[:, 2], color=color_true, s=point_size, label=label_true)
-
     if f_approx is not None:
-        ax.scatter(f_approx[:, 0], f_approx[:, 1], f_approx[:, 2], color=color_approx, s=point_size, label=label_approx)
+        ax.scatter(f_approx[:, 0], f_approx[:, 1], f_approx[:, 2],
+           facecolor='green',marker='o', s=3, label='Approximate Pareto Front')
 
-    ax.set_xlabel(r'$f_1(x)$')
-    ax.set_ylabel(r'$f_2(x)$')
-    ax.set_zlabel(r'$f_3(x)$')
+
+    if initial_points is not None and f_approx is not None:
+        ax.scatter(initial_points[:, 0], initial_points[:, 1], initial_points[:, 2],
+           s=3, facecolor='cyan', marker='o', label='Initial Points')
+        for start, end in zip(initial_points, f_approx):
+            xs, ys, zs = zip(start, end)
+            ax.plot(xs, ys, zs, color='magenta', linewidth=0.5, alpha=0.6)
+
+    if f_true is not None:
+        ax.scatter(f_true[:, 0], f_true[:, 1], f_true[:, 2],
+           c='lightgrey', label='Feasible Space', s=10)
+
+    ax.set_xlabel('f1(x)')
+    ax.set_ylabel('f2(x)')
+    ax.set_zlabel('f3(x)')
 
     ax.view_init(elev=elev, azim=azim)
     ax.legend()
-    ax.set_title(f'Pareto Front Comparison {problem_name}')
+    ax.set_title(f'Pareto Front {problem_name}')
     plt.tight_layout()
+    plt.grid(False)
     plt.show()
     if save_path:
         plt.savefig(save_path)

@@ -1,7 +1,7 @@
 import numpy as np
 
 class TRIDIA:
-    def __init__(self, n=3, lb=-5., ub=5., g_type=('zero', {}), num_pf_samples=1): # num_pf_samples is trivial here
+    def __init__(self, n=3, lb=-3, ub=3, g_type=('zero', {}), fact=1): # num_pf_samples is trivial here
         r"""
         TRIDIA Problem
 
@@ -24,31 +24,22 @@ class TRIDIA:
         self.lb_arr = np.array([lb] * self.n) 
         self.ub_arr = np.array([ub] * self.n)
         
-        self.bounds = tuple([(self.lb_arr[i], self.ub_arr[i]) for i in range(self.n)])
+        self.bounds = [(self.lb_arr[i], self.ub_arr[i]) for i in range(self.n)]
         self.constraints = [] 
         self.g_type = g_type
-        
-        # num_pf_samples is not really used as PF is a single point
-        self.num_pf_samples = num_pf_samples 
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        
-        if hasattr(self, 'true_pareto_front') and self.true_pareto_front.size > 0:
-            # Ref point is slightly above the single Pareto optimal point (0,0,0)
-            self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
-        else:
-             # Fallback, though PF should always be (0,0,0)
-             print("Warning: TRIDIA Pareto front calculation issue. Using a generic ref point.")
-             self.ref_point = np.array([1.0, 1.0, 1.0])
-
-
+                
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
 
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x_vars):
         """
@@ -149,15 +140,6 @@ class TRIDIA:
         hess[2,1] = -12.0
         hess[2,2] =  6.0
         return hess
-
-    def calculate_optimal_pareto_front(self):
-        """
-        Calculates the true Pareto front for the TRIDIA problem.
-        The Pareto front is a single point (0,0,0).
-        """
-        # The Pareto front is a single point (0,0,0)
-        # self.num_pf_samples is ignored here.
-        return np.array([[0.0, 0.0, 0.0]])
 
     def evaluate_f(self, x):
         """

@@ -1,7 +1,7 @@
 import numpy as np
 
 class JOS1:
-    def __init__(self, n=4, lb=-5, ub = 5, g_type = ('zero', {})):
+    def __init__(self, n=5, lb=-3, ub = 3, g_type = ('zero', {}), fact=1):
         r"""
         JOS1 Problem
         f_1(x) = 0.5 * \|x\|^2
@@ -34,14 +34,13 @@ class JOS1:
         self.bounds = [(-5, 5) for _ in range(n)] # Assuming 2 variables for JOS1
         self.constraints = []
         self.g_type = g_type
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+        
 
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
@@ -49,13 +48,10 @@ class JOS1:
 
         # print(self.bounds)
 
-    def calculate_optimal_pareto_front(self):
-        """
-        These are the values of the objectives at the true pareto front
-        f_1(x) = 0.5 * \|x\|^2
-        f_2(x) = 0.5 * \|x - 2\|^2
-        """
-        return np.array([[1.0, 1.0], [4.0, 0.0], [0.0, 4.0]])
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
     
 
     def f1(self, x):

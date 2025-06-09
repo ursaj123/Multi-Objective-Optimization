@@ -30,30 +30,27 @@ class AP4:
         Reference point for hypervolume calculation
     """
     
-    def __init__(self, n=3, lb=-5, ub=5, g_type=('zero', {})):
+    def __init__(self, n=3, lb=-2, ub=2, g_type=('zero', {}), fact=1):
         self.m = 3  # Number of objectives
         self.n = n  # Number of variables (fixed at 3)
         self.lb = lb
         self.ub = ub
-        self.bounds = tuple([(lb, ub) for _ in range(n)])
+        self.bounds = [(lb, ub) for _ in range(n)]
         self.constraints = []
         self.g_type = g_type
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
-
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
 
-    def calculate_optimal_pareto_front(self):
-        """Calculate approximate Pareto front using known critical point"""
-        x_approx = np.array([-0.02199, 0.02157, -0.00390])
-        return np.array([self.evaluate_f(x_approx)])
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
         r"""F₁(x) = 1/9[(x₁-1)⁴ + 2(x₂-2)⁴ + 3(x₃-3)⁴]"""

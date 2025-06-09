@@ -1,7 +1,7 @@
 import numpy as np
 
 class TOI4:
-    def __init__(self, n=4, lb=-5., ub=5., g_type=('zero', {}), num_pf_samples=100):
+    def __init__(self, n=4, lb=-3, ub=3, g_type=('zero', {}), fact=1):
         r"""
         TOI4 Problem (User Updated Formulation)
 
@@ -24,35 +24,22 @@ class TOI4:
         self.lb_arr = np.array([lb] * self.n) 
         self.ub_arr = np.array([ub] * self.n)
         
-        self.bounds = tuple([(self.lb_arr[i], self.ub_arr[i]) for i in range(self.n)])
+        self.bounds = [(self.lb_arr[i], self.ub_arr[i]) for i in range(self.n)]
         self.constraints = [] 
         self.g_type = g_type
-        
-        self.num_pf_samples = num_pf_samples
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        
-        if hasattr(self, 'true_pareto_front') and self.true_pareto_front.size > 0:
-            # For f2=1, max f1 = 2*ub_val^2+1
-            # Ref point is slightly above the max values on the Pareto front
-            max_f1_pf = np.max(self.true_pareto_front[:, 0])
-            max_f2_pf = np.max(self.true_pareto_front[:, 1]) # Should be 1
-            self.ref_point = np.array([max_f1_pf + 1e-4, max_f2_pf + 1e-4])
-        else:
-             # Fallback reference point
-             print("Warning: TOI4 Pareto front sampling might be empty. Using a generic ref point.")
-             # Max f1 approx 2*ub_val^2+1, Max f2 is 1
-             f1_est_max = 2 * (self.ub_val**2) + 1.0 if self.ub_val >= 0 else 1.0 # k_a^2 is non-negative
-             f2_est_max = 1.0
-             self.ref_point = np.array([f1_est_max + 1.0, f2_est_max + 1.0]) # e.g. [52, 2] for ub=5
-
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
+
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x_vars):
         """
@@ -131,58 +118,6 @@ class TOI4:
         hess[3,2] = -1.0
         hess[3,3] =  1.0
         return hess
-
-    def calculate_optimal_pareto_front(self):
-        """
-        Calculates the true Pareto front for the updated TOI4 problem.
-        The Pareto front is:
-        f2 = 1
-        f1 in [1, 2*U^2 + 1], where U is the magnitude of the bound (e.g., ub_val if symmetric 0-centered)
-        """
-        if self.num_pf_samples <= 0:
-            return np.array([])
-
-        # U is the effective upper bound for |k_a| where x1=x2=k_a
-        # Assuming symmetric bounds [-U, U], U = self.ub_val
-        # If bounds are asymmetric, U would be min(|lb_val|, |ub_val|) if k_a can be negative,
-        # or depends on how k_a^2 is maximized. For k_a^2, max is max(lb_val^2, ub_val^2).
-        # Assuming bounds are like [-5, 5], so U = 5.
-        # If bounds are [0,5], U=5. If [-2,5], U_for_sq = 5.
-        # Let's use self.ub_val as U, assuming it's positive and symmetric around 0 or positive interval.
-        
-        # Max k_a^2. If bounds are [-U,U], then max k_a^2 is U^2.
-        # If bounds are [L,U], max k_a^2 is max(L^2, U^2) if 0 is not in [L,U] or L,U have different signs.
-        # If 0 is in [L,U], then max k_a^2 is max(L^2,U^2).
-        # For simplicity, assuming bounds are symmetric [-U,U] or [0,U], so U = self.ub_val
-        # This means k_a can be self.ub_val.
-        # Or more generally, k_a is such that it's within its own bounds.
-        # The variable x_0 (which is k_a) is bounded by self.lb_arr[0] and self.ub_arr[0].
-        # So k_a^2 is in [0, max(self.lb_arr[0]^2, self.ub_arr[0]^2)] if 0 is between lb and ub for x0.
-        # Or more simply, if k_a is in [L0, U0], then k_a^2 is in [min_sq, max_sq]
-        # min_sq is 0 if L0 <= 0 <= U0, else min(L0^2, U0^2).
-        # max_sq is max(L0^2, U0^2).
-        
-        # For f1 = 2*k_a^2+1, k_a is x_0.
-        # Min k_a^2 is 0 if 0 is in [self.lb_arr[0], self.ub_arr[0]]. Otherwise min(lb0^2, ub0^2).
-        # Max k_a^2 is max(self.lb_arr[0]^2, self.ub_arr[0]^2).
-        
-        min_k_sq = 0.0
-        if self.lb_arr[0] > 0 or self.ub_arr[0] < 0: # 0 is not in the interval for x0
-            min_k_sq = min(self.lb_arr[0]**2, self.ub_arr[0]**2)
-        max_k_sq = max(self.lb_arr[0]**2, self.ub_arr[0]**2)
-
-        f1_min_pf = 2 * min_k_sq + 1.0
-        f1_max_pf = 2 * max_k_sq + 1.0
-        
-        if self.num_pf_samples == 1:
-            f1_values_pf = np.array([f1_min_pf]) # Or an average, or a specific point
-        else:
-            f1_values_pf = np.linspace(f1_min_pf, f1_max_pf, self.num_pf_samples)
-        
-        f2_values_pf = np.ones(self.num_pf_samples) # f2 is always 1 on the Pareto front
-        
-        pareto_front_points = np.stack((f1_values_pf, f2_values_pf), axis=-1)
-        return pareto_front_points
 
     def evaluate_f(self, x):
         """

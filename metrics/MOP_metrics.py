@@ -3,6 +3,25 @@ from scipy.spatial.distance import cdist
 from pymoo.indicators.hv import HV
 from pymoo.indicators.igd import IGD
 from pymoo.indicators.igd_plus import IGDPlus
+from pymoo.util.nds.non_dominated_sorting import NonDominatedSorting
+
+
+def utililty(values, initial_points, max_pts=50, rank=2, convex=True):
+    nds_indices = NonDominatedSorting().do(values)
+    # print(f"nds_indices\n{nds_indices}")
+
+    nd_values = []
+    init_points = []
+    for i in range(len(nds_indices)):
+        if convex and i==rank:
+            break
+        nd_values.append(values[nds_indices[i]])
+        init_points.append(initial_points[nds_indices[i]])
+
+    nd_values = np.concatenate(nd_values)
+    init_points = np.concatenate(init_points)
+    # print(f"nd_values.shape = {nd_values.shape}, init_points.shape = {init_points.shape}")
+    return nd_values[:max_pts], init_points[:max_pts]
 
 def generational_distance(Y_N, Y_P, p=2):
     """

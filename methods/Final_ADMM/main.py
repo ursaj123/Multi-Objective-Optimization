@@ -1,9 +1,13 @@
 # Initialize the problem and algorithm
+# PYTHONWARNINGS="ignore::UserWarning" python methods/Final_ADMM/main.py
+
 import os
 import sys
 import numpy as np
 import pandas as pd
 from itertools import product
+from pymoo.util.nds.non_dominated_sorting import NonDominatedSorting
+from joblib import Parallel, delayed
 
 import warnings
 warnings.filterwarnings('ignore')
@@ -17,11 +21,20 @@ from MOP_metrics import *
 from moadmm import MultiObjectiveADMM
 from pareto_front_plots import plot_2d_pareto_front, plot_3d_pareto_front
 
-
 print(f"Problem list - {class_list.keys()}")
 print('Modules imported successfully')
 
-os.makedirs(os.path.join(os.path.dirname(__file__), 'results'), exist_ok=True)
+os.makedirs(os.path.join(os.path.dirname(__file__), 'results_new'), exist_ok=True)
+
+
+
+# problem = class_list['JOS1'](n=2, g_type=('L1', {}))
+# test_x = np.random.uniform(problem.bounds[0][0], problem.bounds[0][1], size=(10000, 2))
+# f_values = np.array([problem.evaluate_f(x) for x in test_x])
+# # plot_3d_pareto_front(f_values, azim=-93, alpha=0.1, save_path='tpf.png')
+# plot_2d_pareto_front(problem.feasible_space(), alpha=0.1, save_path='tpf.png')
+# sys.exit()
+
 
 
 
@@ -73,89 +86,101 @@ def calculate_metrics(Y_N, Y_P, ref_point=None, num_samples = 50):
         'Error_Ratio': error_ratio(Y_N, Y_P)
     }
 
-# problem_lists = ['JOS1', 'SD', 'ZDT1', 'TOI4', 'TRIDIA', 'FDS']
-# problem_lists = ['JOS1', 'SD', 'ZDT1']
-problem_lists = ['AP1'] # n = [5, 10, 20, 30, 50, 100]
-# dimension = [2]
-# dimension = [5, 10, 100]
-dimension = [2]
+def initialize_x(problem, num_samples=100):
+    # print(problem.bounds)
+    initial_points = []
+    for i in range(num_samples):
+        x0 = np.random.uniform(-1.0, 1.0, problem.n)
+        if problem.bounds is not None:
+            x0 = np.array([np.random.uniform(lb, ub) for lb, ub in problem.bounds])
+        z0 = x0.copy()
+        initial_points.append((x0, z0))
+    return initial_points
+
+all_problems = ['AP1', 'AP2', 'AP4', 'DGO2', 'FDS', 'JOS1', 'LOV1', 'MOP2', 'POLONI', 
+'SD', 'TOI4', 'TRIDIA']
+probs_df = pd.DataFrame(columns = ['Problem', 'm', 'n'])
+for problem_key in all_problems:
+    problem = class_list[problem_key]()
+    probs_df = pd.concat([probs_df, pd.DataFrame({'Problem': [problem_key], 'm': [problem.m], 'n': [problem.n]})], ignore_index=True)
+
+probs_df.to_csv(os.path.join(os.path.dirname(__file__), 'results_new', 'problems_info.csv'), index=False)
+sys.exit()
+
+problem_lists = ['JOS1', 'AP1', 'AP2', 'AP4']
+convex_problems = {'AP1', 'AP2', 'AP4', 'BK1', 'DGO2', 'FDS', 'IKK1', 'JOS1', 'LOV1', 'SD', 'TOI4', 'TRIDIA'}
+# problem_lists = ['JOS1']
+num_samples = 150
+max_outer = 200
+max_inner = 20
+rho = 1.0
+
+failed = []
+
+def run(solver, start_points, n_jobs=-1):
+    """Run the solver in parallel for different initial points."""
+    results = Parallel(n_jobs=n_jobs)(delayed(solver.solve)(x0, z0) for x0, z0 in start_points)
+    return results
 
 
-# for key in class_list.keys():
-for problem_key in problem_lists:
-    for n in dimension:
-        # if key=='CIRCULAR':
-        #     continue
-        # if key!="MOP5":
-        #     continue
-        # print(f"Problem - {key}")
-
-        num_samples = 100
-        max_outer = 200
-        max_inner = 20
-        rho = 1.0
-        # norm_constraint = 'Linf'
-        norm_constraint = ''
-        g_type = ('L1', {})
-        # g_type = ('zero', {})
-        problem = class_list[problem_key](n=n, g_type=g_type)
-        # problem = class_list[problem_key](g_type=g_type)
-        problem_name = f'{problem_key}_with_norm_constraint_Linf_g_type_{g_type}_n={n}'
+# keeping norm_constrained only [''] instead of ['', 'Linf']
+for problem_key, g_type, norm_constraint in product(problem_lists, [('zero', {}), ('L1', {})], ['']):
+    try:
+        problem = class_list[problem_key](g_type=g_type, fact=3)
+        # problem_name = f'{problem_key}, g = {g_type[0]}, norm constraint = {norm_constraint}'
+        problem_name = f'{problem_key}, g = {g_type[0]}'
         print(problem_name)
 
-        # plot_3d_pareto_front(problem.true_pareto_front, save_path='tpf.png')
-        # sys.exit()
-
-        # basic checking  if problem functions and its gradients are working well
-        # x = np.ones(n)*0.5
-        # print(f"f_val: {problem.evaluate_f(x)}, g_val: {problem.evaluate_g(x)}")
-        # print(f"f: {problem.evaluate(x, x)}")
-        # print(f"grad: {problem.evaluate_gradients_f(x)}")
-        # sys.exit()
-        
-        # print(f"Problem - {key}, n = {n}")
-        # continue
-        # problem_name = problem.__class__.__name__ + f"_n={n}"
-        
-        # print(problem.__class__.__name__)
-
         solver = MultiObjectiveADMM(problem=problem, max_inner=max_inner, max_outer=max_outer, norm_constraint=norm_constraint, g_type=problem.g_type, rho=rho)
-        results = []
-        for i in range(num_samples):
-            print(f"{'-'*20}Sample {i+1}/{num_samples}{'-'*20}")
-            result = solver.solve()
-            print(result)
-            results.append(result)
-            print(f"{'-'*50}")
+        initial_points = initialize_x(problem, num_samples)
+        run_results = run(solver, initial_points, n_jobs=-1)
 
-        print(os.path.join(os.path.dirname(__file__), "results", f"{problem_name}_pareto_front.png"))
-        # sys.exit()
 
+        results, graph_init = [], []
+        for i, res in enumerate(run_results):
+            if np.linalg.norm(res['x']-res['z'])<=1e-1:
+                results.append(res)
+                graph_init.append(initial_points[i])
+            
         # plotting pareto front
+        if problem_key in convex_problems:
+            Y_approx, graph_init = utililty(np.array([result['f'] for result in results]), np.array(graph_init), convex=True)
+        else:
+            Y_approx, graph_init = utililty(np.array([result['f'] for result in results]), np.array(graph_init), convex=False)
+        
         if problem.m==2:
             plot_2d_pareto_front(
                 # Y_true=problem.true_pareto_front,
-                Y_true=None,
-                Y_approx=np.array([result['f_val'] for result in results]),
+                Y_true=problem.feasible_space(),
+                Y_approx=Y_approx,
+                # initial_points=np.array([result['intial_points'] for result in results]),
+                initial_points = np.array([problem.evaluate(init[0], init[1]) for init in graph_init]),
                 problem_name=problem_name, # later append all of the settings to the string also
-                save_path=os.path.join(os.path.dirname(__file__), "results", f"{problem_name}_pareto_front.png")
+                save_path=os.path.join(os.path.dirname(__file__), "results_new", f"{problem_name}_pareto_front.png")
             )
         elif problem.m==3:
             plot_3d_pareto_front(
                 # f_true=problem.true_pareto_front,
-                f_true=None,
-                f_approx=np.array([result['f'] for result in results]),
+                # f_true=problem.feasible_space(),
+                f_approx=Y_approx,
+                # initial_points=np.array([result['intial_points'] for result in results]),
+                initial_points = np.array([problem.evaluate(init[0], init[1]) for init in graph_init]),
                 problem_name=problem_name, # later append all of the settings to the string also
-                save_path=os.path.join(os.path.dirname(__file__), "results", f"{problem_name}_pareto_front.png")
+                save_path=os.path.join(os.path.dirname(__file__), "results_new", f"{problem_name}_pareto_front.png")
             )
 
 
 
         # Convert results to DataFrame
+        Y_N = np.array([result['f'] for result in results])
+        # print(Y_N)
+        Y_P = Y_N[NonDominatedSorting().do(Y_N, only_non_dominated_front=True)]
+        ref_point = np.max(Y_P, axis=0) + 1e-6
+        # print(f"Y_N shape: {Y_N.shape}, Y_P shape: {Y_P.shape}")
         metrics_res = calculate_metrics(
-            Y_N = np.array([result['f'] for result in results]),
-            Y_P = problem.true_pareto_front,
-            ref_point = problem.ref_point,
+            Y_N = Y_N,
+            Y_P = Y_P,
+            ref_point = ref_point,
             num_samples = num_samples
         )
         
@@ -170,7 +195,7 @@ for problem_key in problem_lists:
                 metrics_res[key] = np.round(metrics_res[key], 4)
 
         # let us create a dataframe for the metrics 
-        if not os.path.exists(os.path.join(os.path.dirname(__file__), 'results', 'metrics.csv')):
+        if not os.path.exists(os.path.join(os.path.dirname(__file__), 'results_new', 'metrics.csv')):
             # create a file
             metrics_df = pd.DataFrame(
                 columns=[
@@ -178,12 +203,21 @@ for problem_key in problem_lists:
                     'Epsilon', 'Coverage', 'R2', 'Average_Hausdroff', 'Error_Ratio'
                 ]
             )
-            metrics_df.to_csv(os.path.join(os.path.dirname(__file__), 'results', 'metrics.csv'), index=False)
+            metrics_df.to_csv(os.path.join(os.path.dirname(__file__), 'results_new', 'metrics.csv'), index=False)
 
 
         # let us read the csv file and then concat to it
-        metrics_df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'results', 'metrics.csv'))
+        metrics_df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'results_new', 'metrics.csv'))
         metrics_df = pd.concat([metrics_df, pd.DataFrame(metrics_res, index=[0])], ignore_index=True)
-        metrics_df.to_csv(os.path.join(os.path.dirname(__file__), 'results', 'metrics.csv'), index=False)
+        metrics_df.to_csv(os.path.join(os.path.dirname(__file__), 'results_new', 'metrics.csv'), index=False)
 
         print(metrics_res)
+
+    except:
+        # let us also print the traceback
+        import traceback
+        traceback.print_exc()
+        print(f"Error occurred for problem {problem_name}, g_type = {g_type}, norm_constraint = {norm_constraint}")
+        failed.append((problem_name, g_type, norm_constraint))
+
+print(f"Failed problems: {failed}")

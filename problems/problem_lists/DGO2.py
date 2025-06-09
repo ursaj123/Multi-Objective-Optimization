@@ -1,7 +1,7 @@
 import numpy as np
 
 class DGO2:
-    def __init__(self, lb=-9, ub=9, g_type=('zero', {})):
+    def __init__(self, lb=-9, ub=9, g_type=('zero', {}), fact=1):
         """
         DGO2 Problem
         f_1(x) = x^2
@@ -28,34 +28,28 @@ class DGO2:
         self.bounds = [(lb, ub)]
         self.constraints = []
         self.g_type = g_type
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
 
-    def calculate_optimal_pareto_front(self, num_points=100):
-        """
-        Generates points on the Pareto front.
-        """
-        x_values = np.linspace(0, self.ub, num_points) # Considering x >= 0 for the Pareto front
-        f1_values = x_values**2
-        f2_values = 9 - np.sqrt(81 - x_values**2)
-        return np.column_stack([f1_values, f2_values])
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
-        return x**2
+        return x[0]**2
 
     def grad_f1(self, x):
         return 2 * x
 
     def f2(self, x):
-        return 9 - np.sqrt(81 - x**2)
+        return 9 - np.sqrt(81 - x[0]**2)
 
     def grad_f2(self, x):
         return x / np.sqrt(81 - x**2) if (81 - x**2) > 0 else np.inf

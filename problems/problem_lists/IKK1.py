@@ -1,7 +1,7 @@
 import numpy as np
 
 class IKK1:
-    def __init__(self, g_type=('zero', {})):
+    def __init__(self, g_type=('zero', {}), fact=1):
         """
         IKK1 Problem
         f_1(x_1) = x_1^2
@@ -26,28 +26,19 @@ class IKK1:
         self.bounds = [(-2, 2), (-2, 2)]  # x1, x2
         self.constraints = []
         self.g_type = g_type
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
 
-    def calculate_optimal_pareto_front(self, num_points=100):
-        """
-        Approximates the Pareto front for IKK1.  The Pareto front is a 2D
-        surface. We sample x1 and set x2 = 0.
-        """
-        x1_values = np.linspace(-50, 50, num_points)
-        f1_values = x1_values**2
-        f2_values = (x1_values - 2)**2
-        f3_values = np.zeros_like(x1_values)  # x2 = 0
-        pareto_front = np.column_stack([f1_values, f2_values, f3_values])
-        return pareto_front
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
         return x[0]**2

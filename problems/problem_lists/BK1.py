@@ -1,7 +1,7 @@
 import numpy as np
 
 class BK1:
-    def __init__(self, n=2, lb=-5, ub=10, g_type=('zero', {})):
+    def __init__(self, n=2, lb=-2, ub=2, g_type=('zero', {}), fact=1):
         r"""
         BK1 Problem
 
@@ -27,20 +27,19 @@ class BK1:
         self.bounds = [(lb, ub) for _ in range(n)]
         self.constraints = []
         self.g_type = g_type
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+        
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
 
-    def calculate_optimal_pareto_front(self, n_points=100):
-        """
-        Compute the true Pareto front points based on the parameterization:
-        f_1 = 50 * (1 - lambda)^2
-        f_2 = 50 * lambda^2
-        for lambda in [0, 1]
-        """
-        lam = np.linspace(0, 1, n_points)
-        f1 = 50 * (1 - lam)**2
-        f2 = 50 * lam**2
-        return np.stack([f1, f2], axis=1)
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
         """Objective f1: f1(x) = x_1^2 + x_2^2"""
@@ -85,7 +84,10 @@ class BK1:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            pass
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif self.g_type[0] == 'indicator':
             pass
         else:

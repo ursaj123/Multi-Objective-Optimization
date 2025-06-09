@@ -21,7 +21,7 @@ class POLONI:
     -pi <= x, y <= pi
     """
 
-    def __init__(self, n=2, g_type=('zero', {})):
+    def __init__(self, n=2, g_type=('zero', {}), fact=1):
         """
         Initialize the POLONI problem.
 
@@ -39,26 +39,25 @@ class POLONI:
 
         self.bounds = [(-np.pi, np.pi), (-np.pi, np.pi)]
         self.constraints = []  # No explicit constraints other than bounds
+        self.g_type = g_type  # Type of g function, e.g., ('zero', {}), ('L1', {})
 
-        self.g_type = g_type
-
-        # Pareto front for Poloni is complex and typically loaded from data.
-        self.true_pareto_front = self.calculate_optimal_pareto_front() # Returns empty
-        
-        # Reference point based on literature for Poloni problem.
-        # Approximate maximums: f1 ~70-75, f2 ~55-60.
-        self.ref_point = np.array([75.0, 60.0]) 
 
         self.l1_ratios = np.array([]) # Initialize as empty numpy array
         self.l1_shifts = np.array([]) # Initialize as empty numpy array
         if self.g_type[0] == 'L1':
             ratios, shifts = [], []
             for i in range(self.m):
-                ratios.append(1.0 / ((i + 1) * self.m))
+                ratios.append(1.0 / ((i + 1) * self.n*fact))
                 shifts.append(float(i))
             self.l1_ratios = np.array(ratios)
             self.l1_shifts = np.array(shifts)
 
+
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
+    
     # Helper methods for B1, B2 values
     def _B1_val(self, X_arr):
         x_var, y_var = X_arr[0], X_arr[1]

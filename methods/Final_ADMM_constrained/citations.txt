@@ -1,0 +1,278 @@
+@article{custodio2011direct,
+  title={Direct multisearch for multiobjective optimization},
+  author={Cust{\'o}dio, Ana Lu{\'\i}sa and Madeira, JF Aguilar and Vaz, A Ismael F and Vicente, Lu{\'\i}s Nunes},
+  journal={SIAM Journal on Optimization},
+  volume={21},
+  number={3},
+  pages={1109--1140},
+  year={2011},
+  publisher={SIAM}
+}
+@article{mita2019nonmonotone,
+  title={Nonmonotone line searches for unconstrained multiobjective optimization problems},
+  author={Mita, Kanako and Fukuda, Ellen H and Yamashita, Nobuo},
+  journal={Journal of Global Optimization},
+  volume={75},
+  number={1},
+  pages={63--90},
+  year={2019},
+  publisher={Springer}
+}
+@article{wu2019general,
+  title={General inertial proximal gradient method for a class of nonconvex nonsmooth optimization problems},
+  author={Wu, Zhongming and Li, Min},
+  journal={Computational Optimization and Applications},
+  volume={73},
+  pages={129--158},
+  year={2019},
+  publisher={Springer}
+}
+@article{poliquin1996prox,
+  title={Prox-regular functions in variational analysis},
+  author={Poliquin, Ren{\'e} and Rockafellar, R},
+  journal={Transactions of the American Mathematical Society},
+  volume={348},
+  number={5},
+  pages={1805--1838},
+  year={1996}
+}
+@article{levenberg1944method,
+  title={A method for the solution of certain non-linear problems in least squares},
+  author={Levenberg, Kenneth},
+  journal={Quarterly of applied mathematics},
+  volume={2},
+  number={2},
+  pages={164--168},
+  year={1944}
+}
+@article{marquardt1963algorithm,
+  title={An algorithm for least-squares estimation of nonlinear parameters},
+  author={Marquardt, Donald W},
+  journal={Journal of the society for Industrial and Applied Mathematics},
+  volume={11},
+  number={2},
+  pages={431--441},
+  year={1963},
+  publisher={SIAM}
+}
+@book{nocedal1999numerical,
+  title={Numerical optimization},
+  author={Nocedal, J and Wright, SJ},
+  journal={New York},
+  year={1999}
+}
+@article{moreau1962fonctions,
+  title={Fonctions convexes duales et points proximaux dans un espace hilbertien},
+  author={Moreau, Jean Jacques},
+  journal={Comptes rendus hebdomadaires des s{\'e}ances de l'Acad{\'e}mie des sciences},
+  volume={255},
+  pages={2897--2899},
+  year={1962}
+}
+@article{moreau1965proximite,
+  title={Proximit{\'e} et dualit{\'e} dans un espace hilbertien},
+  author={Moreau, Jean-Jacques},
+  journal={Bulletin de la Soci{\'e}t{\'e} math{\'e}matique de France},
+  volume={93},
+  pages={273--299},
+  year={1965}
+}
+@article{rockafellar1998variational,
+  title={Variational analysis springer-verlag},
+  author={Rockafellar, RT and Wets, RJB},
+  journal={New Y ork},
+  year={1998}
+}
+@article{zarantonello1960solving,
+  title={Solving functional equations by contractive averaging, Math},
+  author={Zarantonello, E},
+  journal={Research Center Report},
+  volume={160},
+  year={1960}
+}
+@techreport{lemarechal1994practical,
+  title={Practical aspects of the Moreau-Yosida regularization II: Numerical considerations},
+  author={Lemarechal, C},
+  year={1994},
+  institution={Univ. of Michigan, Ann Arbor, MI (United States)}
+}
+@article{lemarechal1997practical,
+  title={Practical aspects of the Moreau--Yosida regularization: Theoretical preliminaries},
+  author={Lemar{\'e}chal, Claude and Sagastiz{\'a}bal, Claudia},
+  journal={SIAM journal on optimization},
+  volume={7},
+  number={2},
+  pages={367--385},
+  year={1997},
+  publisher={SIAM}
+}
+@article{attouch1977convergence,
+  title={Convergence de fonctions convexes, des sous-diff{\'e}rentiels et semi-groupes associ{\'e}s},
+  author={Attouch, H{\'e}dy},
+  journal={CR Acad. Sci. Paris},
+  volume={284},
+  number={539-542},
+  pages={13},
+  year={1977}
+}
+@article{bauschke2006joint,
+  title={Joint minimization with alternating Bregman proximity operators},
+  author={Bauschke, Heinz H and Combettes, Patrick L and Noll, Dominikus},
+  journal={Pacific Journal of Optimization},
+  year={2006},
+  pages={1--27}
+}
+@article{censor1992proximal,
+  title={Proximal minimization algorithm with D-functions},
+  author={Censor, Yair and Zenios, Stavros Andrea},
+  journal={Journal of Optimization Theory and Applications},
+  volume={73},
+  number={3},
+  pages={451--464},
+  year={1992},
+  publisher={Springer}
+}
+@article{beck2012smoothing,
+  title={Smoothing and first order methods: A unified framework},
+  author={Beck, Amir and Teboulle, Marc},
+  journal={SIAM Journal on Optimization},
+  volume={22},
+  number={2},
+  pages={557--580},
+  year={2012},
+  publisher={SIAM}
+}
+@article{combettes2011proximal,
+  title={Proximal splitting methods in signal processing},
+  author={Combettes, Patrick L and Pesquet, Jean-Christophe},
+  journal={Fixed-point algorithms for inverse problems in science and engineering},
+  pages={185--212},
+  year={2011},
+  publisher={Springer}
+}
+@article{beck2009gradient,
+  title={Gradient-based algorithms with applications to signal recovery},
+  author={Beck, Amir and Teboulle, Marc},
+  journal={Convex optimization in signal processing and communications},
+  pages={42--88},
+  year={2009}
+}
+@article{bertsekas1997nonlinear,
+  title={Nonlinear programming},
+  author={Bertsekas, Dimitri P},
+  journal={Journal of the Operational Research Society},
+  volume={48},
+  number={3},
+  pages={334--334},
+  year={1997},
+  publisher={Taylor \& Francis}
+}
+@article{Fastproxgrad,
+    author ={L. Vandenberghe},
+    title = {Fast proximal gradient methods},
+    journal = {http://www.ee.ucla.edu/~vandenbe/236C/lectures/fgrad.pdf},
+    year = {2010}
+}
+@article{nemirovskij1983problem,
+  title={Problem complexity and method efficiency in optimization},
+  author={Nemirovskij, Arkadij Semenovi{\v{c}} and Yudin, David Borisovich},
+  year={1983},
+  publisher={Wiley-Interscience}
+}
+@article{byrd1999interior,
+  title={An interior point algorithm for large-scale nonlinear programming},
+  author={Byrd, Richard H and Hribar, Mary E and Nocedal, Jorge},
+  journal={SIAM Journal on Optimization},
+  volume={9},
+  number={4},
+  pages={877--900},
+  year={1999},
+  publisher={SIAM}
+}
+@article{guo2016convergence,
+  title={Convergence analysis of ISTA and FISTA for “strongly+ semi” convex programming},
+  author={Guo, Ke and Yuan, Xiaoming and Zeng, Shangzhi},
+  journal={Optimization Online},
+  year={2016}
+}
+@article{fan2001variable,
+  title={Variable selection via nonconcave penalized likelihood and its oracle properties},
+  author={Fan, Jianqing and Li, Runze},
+  journal={Journal of the American statistical Association},
+  volume={96},
+  number={456},
+  pages={1348--1360},
+  year={2001},
+  publisher={Taylor \& Francis}
+}
+@article{ochs2014ipiano,
+  title={iPiano: Inertial proximal algorithm for nonconvex optimization},
+  author={Ochs, Peter and Chen, Yunjin and Brox, Thomas and Pock, Thomas},
+  journal={SIAM Journal on Imaging Sciences},
+  volume={7},
+  number={2},
+  pages={1388--1419},
+  year={2014},
+  publisher={SIAM}
+}
+@article{polyak1964some,
+  title={Some methods of speeding up the convergence of iteration methods},
+  author={Polyak, Boris T},
+  journal={Ussr computational mathematics and mathematical physics},
+  volume={4},
+  number={5},
+  pages={1--17},
+  year={1964},
+  publisher={Elsevier}
+}
+@article{yang2017proximal,
+  title={Proximal gradient method with extrapolation and line search for a class of nonconvex and nonsmooth problems},
+  author={Yang, Lei},
+  journal={arXiv preprint arXiv:1711.06831},
+  year={2017}
+}
+@article{wen2017linear,
+  title={Linear convergence of proximal gradient algorithm with extrapolation for a class of nonconvex nonsmooth minimization problems},
+  author={Wen, Bo and Chen, Xiaojun and Pong, Ting Kei},
+  journal={SIAM Journal on Optimization},
+  volume={27},
+  number={1},
+  pages={124--145},
+  year={2017},
+  publisher={SIAM}
+}
+@article{johnstone2017local,
+  title={Local and global convergence of a general inertial proximal splitting scheme for minimizing composite functions},
+  author={Johnstone, Patrick R and Moulin, Pierre},
+  journal={Computational Optimization and Applications},
+  volume={67},
+  number={2},
+  pages={259--292},
+  year={2017},
+  publisher={Springer}
+}
+@article{chambolle2015convergence,
+  title={On the convergence of the iterates of the Fast Iterative Shrinkage/Thresholding Algorithm},
+  author={Chambolle, Antonin and Dossal, Ch},
+  journal={Journal of Optimization theory and Applications},
+  volume={166},
+  pages={968--982},
+  year={2015},
+  publisher={Springer}
+}
+
+@article{mardle2000investigation,
+  title={An investigation of genetic algorithms for the optimization of multi-objective fisheries bioeconomic models},
+  author={Mardle, SJ and Pascoe, Sean and Tamiz, Mehrdad},
+  journal={International Transactions in Operational Research},
+  volume={7},
+  number={1},
+  pages={33--49},
+  year={2000},
+  publisher={Wiley Online Library}
+}
+@phdthesis{jena2013multi,
+  title={Multi-Objective Optimization of the Design Parameters of a Shell and Tube Type Heat Exchanger Based on Economic and Size Consideration},
+  author={Jena, Sampreeti},
+  year={2013}
+}

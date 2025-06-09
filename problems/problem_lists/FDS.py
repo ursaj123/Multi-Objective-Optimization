@@ -1,7 +1,7 @@
 import numpy as np
 
 class FDS:
-    def __init__(self, n=10, g_type=('zero', {})):
+    def __init__(self, n=2, g_type=('zero', {}), fact=1):
         """
         Correct its pareto front code
 
@@ -27,70 +27,19 @@ class FDS:
         self.bounds = [(-1, 1)] * n  # Default bounds, you might need to adjust
         self.constraints = []
         self.g_type = g_type
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
 
-    def calculate_optimal_pareto_front(self, num_points=500):
-        """
-        Approximates the Pareto front for FDS.  This is complex due to the
-        variable dimension.  We'll use a simplified sampling approach.
-        """
-        # Create sample points.  A more sophisticated sampling method
-        # (like Latin Hypercube) would be better in higher dimensions.
-        return np.array([1.0, 1.0, 1.0])  # Placeholder for the true Pareto front
-        x_samples = np.linspace(-5, 5, num_points)  # Range for each x_k
-        # Initialize an array to hold the objective values
-        f_values = np.zeros((num_points*self.n, self.m))
-        # Create a meshgrid to get all combinations of x_k values.
-        if self.n == 1:
-            X = [x_samples]
-        elif self.n == 2:
-            X1, X2 = np.meshgrid(x_samples, x_samples)
-            X = [X1.ravel(), X2.ravel()]
-        elif self.n == 3:
-            X1, X2, X3 = np.meshgrid(x_samples, x_samples, x_samples)
-            X = [X1.ravel(), X2.ravel(), X3.ravel()]
-        elif self.n == 4:
-            X1, X2, X3, X4 = np.meshgrid(x_samples, x_samples, x_samples, x_samples)
-            X = [X1.ravel(), X2.ravel(), X3.ravel(), X4.ravel()]
-        elif self.n > 4:
-            # Placeholder: For n > 4, a full meshgrid is very inefficient.
-            #  Consider using a different sampling strategy here.
-            X = np.random.uniform(low=-5, high=5, size=(num_points, self.n))
-            f_values = np.apply_along_axis(self.evaluate_f, 1, X)
-            points = f_values
-            is_pareto = np.ones(points.shape[0], dtype=bool)
-            for i, c in enumerate(points):
-                is_pareto[i] = np.all(np.any(points[:i] < c, axis=1)) and \
-                               np.all(np.any(points[i+1:] < c, axis=1))
-            return points[is_pareto]
-        else:
-          return np.array([])
-
-        if self.n <= 4: #and X is not None:
-            # Evaluate the objectives for each combination of x_k
-            
-            x_combinations = np.array(X).T
-            print(x_combinations.shape)
-            print(x_combinations[0])
-            for i, x in enumerate(x_combinations):
-                f_values[i] = self.evaluate_f(x)
-            points = f_values
-            # Pareto filtering (removing dominated points)
-            is_pareto = np.ones(points.shape[0], dtype=bool)
-            for i, c in enumerate(points):
-                is_pareto[i] = np.all(np.any(points[:i] < c, axis=1)) and \
-                               np.all(np.any(points[i+1:] < c, axis=1))
-            return points[is_pareto]
-        return np.array([])
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
         n = self.n

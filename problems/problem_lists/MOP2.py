@@ -1,7 +1,7 @@
 import numpy as np
 
 class MOP2:
-    def __init__(self, n=2, g_type=('zero', {})):
+    def __init__(self, n=2, g_type=('zero', {}), fact=1):
         """
         MOP2 Problem
 
@@ -14,13 +14,26 @@ class MOP2:
         """
         self.m = 2  # Number of objectives
         self.n = n
-        self.bounds = tuple([(-4, 4) for _ in range(n)])
-        self.lb = -4
-        self.ub = 4
+        self.lb = -2
+        self.ub = 2
+        self.bounds = [(self.lb, self.ub) for _ in range(n)]
         self.g_type = g_type
         self.constraints = []
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+        
+
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
+
+
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
         return 1 - np.exp(-np.sum((x - 1/np.sqrt(self.n))**2))
@@ -83,7 +96,10 @@ class MOP2:
         if g_type == 'zero':
             return g_values
         elif g_type == 'L1':
-            pass
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif g_type == 'indicator':
             pass
         elif g_type == 'max':

@@ -1,7 +1,7 @@
 import numpy as np
 
 class SD:
-    def __init__(self, n=4, g_type=('zero', {}), num_pf_samples=100):
+    def __init__(self, n=4, g_type=('zero', {}), fact=1):
         r"""
         SD Problem
 
@@ -28,24 +28,23 @@ class SD:
         self.constraints = [] # No explicit constraints other than bounds
         self.g_type = g_type # For the G(z) part of the optimization problem F(x) + G(z)
         
-        self.num_pf_samples = num_pf_samples # Used in calculate_optimal_pareto_front
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        
-        if hasattr(self, 'true_pareto_front') and self.true_pareto_front.size > 0:
-            self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
-        else:
-             # Fallback reference point if Pareto front calculation is empty
-             # Based on PF endpoints: f1_max approx 13.73, f2_max approx 7
-             print("Warning: SD Pareto front sampling might be empty. Using a generic ref point.")
-             self.ref_point = np.array([14.0, 7.5]) 
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
+
+    def feasible_space(self):
+        test_x = []
+        for i in range(self.n):
+            low, high = self.bounds[i]
+            test_x.append(np.random.uniform(low, high, size=(50000,)))
+        test_x = np.array(test_x).T  # Shape (1000, n) 
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x_vars):
         """
@@ -78,10 +77,10 @@ class SD:
         x = np.asarray(x_vars)
         # Add small epsilon to denominators to prevent division by zero if x_i are ever outside bounds
         # or exactly zero, though bounds should prevent this.
-        epsilon = 1e-9
-        term1 = 2.0 / (x[0] + epsilon)
-        term2 = (2.0 * np.sqrt(2)) / (x[1] + epsilon)
-        term3 = (2.0 * np.sqrt(2)) / (x[2] + epsilon)
+        # epsilon = 0.0
+        term1 = 2.0 / (x[0])
+        term2 = (2.0 * np.sqrt(2)) / (x[1])
+        term3 = (2.0 * np.sqrt(2)) / (x[2])
         return term1 + term2 + term3 + x[3]
 
     def grad_f2(self, x_vars):
@@ -111,33 +110,6 @@ class SD:
         hess[2,2] = (4.0 * np.sqrt(2)) / (x[2]**3 + epsilon)
         # hess[3,3] is 0, already initialized
         return hess
-
-    def calculate_optimal_pareto_front(self):
-        """
-        Calculates the true Pareto front for the SD problem.
-        The Pareto front is given by:
-        f1 = 6*t + 1
-        f2 = 6/t + 1
-        for t in [1, 3/sqrt(2)]
-        """
-        if self.num_pf_samples <= 0:
-            return np.array([]) # Return empty if no sampling requested
-            
-        # Parameter t for the Pareto front
-        t_min = 1.0
-        t_max = 3.0 / np.sqrt(2)
-        
-        if self.num_pf_samples == 1: # Handle edge case of single sample
-            t_values = np.array([t_min]) # Or average, or t_min
-        else:
-            t_values = np.linspace(t_min, t_max, self.num_pf_samples)
-        
-        f1_pf = 6.0 * t_values + 1.0
-        f2_pf = 6.0 / t_values + 1.0
-        
-        # Stacking them column-wise: each row is a point (f1, f2)
-        pareto_front_points = np.stack((f1_pf, f2_pf), axis=-1)
-        return pareto_front_points
 
     def evaluate_f(self, x):
         """
@@ -178,7 +150,6 @@ class SD:
             pass
         else:
             pass
-
 
     def evaluate(self, x, z):
         """

@@ -19,7 +19,7 @@ class ZDT2:
     On this front, f1 = X[0] and f2 = 1 - X[0]^2, with X[0] in [0,1].
     """
 
-    def __init__(self, n=30, g_type=('zero', {})):
+    def __init__(self, n=3, g_type=('zero', {}), fact=1):
         """
         Initialize the ZDT2 problem.
 
@@ -37,25 +37,22 @@ class ZDT2:
 
         self.bounds = [(0.0, 1.0) for _ in range(self.n)]
         self.constraints = []  # No explicit constraints other than bounds
-
         self.g_type = g_type  # For the f(X) + g(z) structure
-
-        self.true_pareto_front = self.calculate_optimal_pareto_front(num_points=100)
-        
-        if self.true_pareto_front is not None and self.true_pareto_front.size > 0:
-            self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4 
-        else: 
-            self.ref_point = np.array([1.0 + 1e-4, 1.0 + 1e-4])
 
         self.l1_ratios = np.array([])
         self.l1_shifts = np.array([])
         if self.g_type[0] == 'L1':
             ratios, shifts = [], []
             for i in range(self.m):
-                ratios.append(1.0 / ((i + 1) * self.m))
+                ratios.append(1.0 / ((i + 1) * self.n*fact))
                 shifts.append(float(i))
             self.l1_ratios = np.array(ratios)
             self.l1_shifts = np.array(shifts)
+
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
         
     def _g_zdt2(self, X_arr):
         """ 
@@ -150,23 +147,6 @@ class ZDT2:
                 
         return hess
 
-    def calculate_optimal_pareto_front(self, num_points=100):
-        """
-        Calculates points on the true Pareto front for ZDT2.
-        On the front: f1 = x1 (with x1 in [0,1]), f2 = 1 - x1^2.
-        This occurs when X[k] = 0 for k=1,...,n-1 (i.e., x_2 to x_n are zero), making g(X)=1.
-        """
-        if num_points <= 0: 
-            return np.array([])
-        
-        pareto_front = np.zeros((num_points, self.m))
-        f1_values = np.linspace(0.0, 1.0, num_points)
-        
-        for i, f1_val in enumerate(f1_values):
-            pareto_front[i, 0] = f1_val
-            pareto_front[i, 1] = 1.0 - f1_val**2
-        return pareto_front
-
     def evaluate_f(self, X):
         """Evaluates all objective functions for vector X."""
         return np.array([self.f1(X), self.f2(X)])
@@ -179,7 +159,7 @@ class ZDT2:
         """Evaluates Hessians of all objective functions for vector X."""
         return np.array([self.hess_f1(X), self.hess_f2(X)])
 
-    def evaluate_g(self, z_vec): # This is the additive g(z), not ZDT2's internal g(X)
+    def evaluate_g(self, z): # This is the additive g(z), not ZDT2's internal g(X)
         """
         Evaluates the problem's additive g(z) functions (e.g. for L1 penalty).
         'z_vec' is expected to be an n-dimensional vector like X.
@@ -187,22 +167,15 @@ class ZDT2:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            if not self.l1_ratios.size and not self.l1_shifts.size:
-                temp_ratios, temp_shifts = [], []
-                for i in range(self.m):
-                    temp_ratios.append(1.0 / ((i + 1) * self.m))
-                    temp_shifts.append(float(i))
-                self.l1_ratios = np.array(temp_ratios)
-                self.l1_shifts = np.array(temp_shifts)
-            
             res = np.zeros(self.m)
-            if not isinstance(z_vec, np.ndarray):
-                z_vec = np.array(z_vec, dtype=float)
-            
             for i in range(self.m):
-                res[i] = np.linalg.norm((z_vec - self.l1_shifts[i]) * self.l1_ratios[i], ord=1)
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
             return res
-        return np.zeros(self.m) 
+        elif self.g_type[0] == 'indicator':
+            pass
+        elif self.g_type[0] == 'max':
+            pass
+        return np.zeros(self.m)
 
     def evaluate(self, X, z_vec):
         """Evaluates F(X, z_vec) = f(X) + g(z_vec)."""

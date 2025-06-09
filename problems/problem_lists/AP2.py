@@ -1,7 +1,7 @@
 import numpy as np
 
 class AP2:
-    def __init__(self, n=1, lb=-5, ub=5, g_type=('zero', {})):
+    def __init__(self, lb=-2, ub=2, g_type=('zero', {}), fact=1):
         r"""
         AP2 Problem (One dimension)
         F_1(x) = x^2 - 4
@@ -23,23 +23,22 @@ class AP2:
         self.n = 1  # Fixed at 1 for this problem (one dimension)
         self.lb = lb
         self.ub = ub
-        self.bounds = tuple([(lb, ub) for _ in range(self.n)])
+        self.bounds = [(lb, ub) for _ in range(self.n)]
         self.constraints = []
         self.g_type = g_type
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+        
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
 
-    def calculate_optimal_pareto_front(self):
-        """
-        For AP2, the pareto front is the interval [0, 1]
-        We'll sample a few points from this interval to represent the front
-        """
-        # Sample points in [0, 1]
-        x_values = np.linspace(0, 1, 100)  # 100 points evenly spaced between 0 and 1
         
-        # Evaluate the objectives at these points
-        f_values = np.array([self.evaluate_f(np.array([x])) for x in x_values])
-        
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
         return f_values
 
     def f1(self, x):
@@ -83,9 +82,10 @@ class AP2:
         if self.g_type[0] == 'zero':
             return np.zeros(self.m)
         elif self.g_type[0] == 'L1':
-            # Implement L1 regularization when needed
-            # This would depend on parameters in self.g_type[1]
-            pass
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif self.g_type[0] == 'indicator':
             # Implement indicator function when needed
             pass

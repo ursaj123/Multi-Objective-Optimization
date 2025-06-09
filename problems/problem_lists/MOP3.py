@@ -18,16 +18,28 @@ class MOP3:
         """
         self.n = 2
         self.m = 2
-        self.bounds = tuple([(-np.pi, np.pi)] * 2)
         self.lb = -np.pi
         self.ub = np.pi
+        self.bounds = [(self.lb, self.ub)] * 2
         self.g_type = g_type
         self.constraints = []
         self.A1 = 0.5 * np.sin(1) - 2 * np.cos(1) + np.sin(2) - 1.5 * np.cos(2)
         self.A2 = 1.5 * np.sin(1) - np.cos(1) + 2 * np.sin(2) - 0.5 * np.cos(2)
         # For maximization, we'll negate the objective functions.
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+
+        self.l1_ratios, self.l1_shifts = [], []
+        if self.g_type[0]=='L1':
+            for i in range(self.m):
+                self.l1_ratios.append(1/((i+1)*self.n))
+                self.l1_shifts.append(i)
+            self.l1_ratios = np.array(self.l1_ratios)
+            self.l1_shifts = np.array(self.l1_shifts)
+
+    
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(1000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
         B1 = 0.5 * np.sin(x[0]) - 2 * np.cos(x[0]) + np.sin(x[1]) - 1.5 * np.cos(x[1])
@@ -99,7 +111,10 @@ class MOP3:
         if g_type == 'zero':
             return g_values
         elif g_type == 'L1':
-            pass
+            res = np.zeros(self.m)
+            for i in range(self.m):
+                res[i] = np.linalg.norm((z-self.l1_shifts[i])*self.l1_ratios[i], ord=1)
+            return res
         elif g_type == 'indicator':
             pass
         elif g_type == 'max':

@@ -1,3 +1,50 @@
+Failed problems: [
+('DGO1, g = zero, norm constraint = ', ('zero', {}), ''), 
+('DGO1, g = zero, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('DGO1, g = L1, norm constraint = ', ('L1', {}), ''), 
+('DGO1, g = L1, norm constraint = Linf', ('L1', {}), 'Linf'), 
+('DGO2, g = zero, norm constraint = ', ('zero', {}), ''), 
+('DGO2, g = zero, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('DGO2, g = L1, norm constraint = ', ('L1', {}), ''), 
+('DGO2, g = L1, norm constraint = Linf', ('L1', {}), 'Linf'), 
+('FA1, g = zero, norm constraint = ', ('zero', {}), ''), 
+('FA1, g = zero, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('FA1, g = L1, norm constraint = ', ('L1', {}), ''), 
+('FA1, g = L1, norm constraint = Linf', ('L1', {}), 'Linf'), 
+('FAR1, g = zero, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('FAR1, g = L1, norm constraint = Linf', ('L1', {}), 'Linf'), 
+('FAR1, g = L1, norm constraint = Linf', ('zero', {}), ''), 
+('FAR1, g = L1, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('FAR1, g = L1, norm constraint = Linf', ('L1', {}), ''), 
+('FAR1, g = L1, norm constraint = Linf', ('L1', {}), 'Linf'), 
+('FAR1, g = L1, norm constraint = Linf', ('zero', {}), ''), 
+('FAR1, g = L1, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('FAR1, g = L1, norm constraint = Linf', ('L1', {}), ''), 
+('FAR1, g = L1, norm constraint = Linf', ('L1', {}), 'Linf'), 
+('FAR1, g = L1, norm constraint = Linf', ('zero', {}), ''), 
+('FAR1, g = L1, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('FAR1, g = L1, norm constraint = Linf', ('L1', {}), ''), 
+('FAR1, g = L1, norm constraint = Linf', ('L1', {}), 'Linf'), 
+('SD, g = zero, norm constraint = Linf', ('zero', {}), 'Linf'), 
+('ZDT2, g = L1, norm constraint = ', ('L1', {}), ''), 
+('ZDT2, g = L1, norm constraint = Linf', ('L1', {}), 'Linf')]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Initial x: [-2.65735412 -4.06196869], Initial z: [-2.65735412 -4.06196869]
 
 Primal residual: 9.362173080444336, Dual residual: 4.508493900299072, inner iteration: 1

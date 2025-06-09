@@ -23,7 +23,7 @@ class LOV1:
         ref_point (numpy.ndarray):  Reference point for hypervolume calculation.
         num_samples (int): Number of samples used to approximate the Pareto front.
     """
-    def __init__(self, n=2, lb=-5, ub=5, g_type=('zero', {}), num_samples=10000):
+    def __init__(self, n=2, lb=-4, ub=4, g_type=('zero', {}), fact=1):
         """
         Initialize the LOV1 problem.
 
@@ -40,48 +40,23 @@ class LOV1:
         self.n = n
         self.lb = lb
         self.ub = ub
-        self.bounds = tuple([(lb, ub) for _ in range(n)])
+        self.bounds = [(lb, ub) for _ in range(n)]
         self.constraints = []
         self.g_type = g_type
-        self.num_samples = num_samples
-        self.true_pareto_front = self.calculate_optimal_pareto_front()
-        self.ref_point = np.max(self.true_pareto_front, axis=0) + 1e-4
+        
 
         self.l1_ratios, self.l1_shifts = [], []
         if self.g_type[0]=='L1':
             for i in range(self.m):
-                self.l1_ratios.append(1/((i+1)*self.m))
+                self.l1_ratios.append(1/((i+1)*self.n*fact))
                 self.l1_shifts.append(i)
             self.l1_ratios = np.array(self.l1_ratios)
             self.l1_shifts = np.array(self.l1_shifts)
 
-    def calculate_optimal_pareto_front(self):
-        """
-        Approximate the Pareto front by sampling the decision space and
-        finding the non-dominated objective vectors.
-
-        Returns:
-            numpy.ndarray: A 2D array representing the approximated Pareto front.
-                           Each row corresponds to an objective vector.
-        """
-        samples = np.random.uniform(self.lb, self.ub, size=(self.num_samples, self.n))
-        objective_values = np.array([self.evaluate_f(sample) for sample in samples])
-
-        def is_dominated(point, front):
-            """Check if a point is dominated by any point in the front."""
-            for other in front:
-                if np.all(other <= point) and np.any(other < point):
-                    return True
-            return False
-
-        non_dominated_front = []
-        for point in objective_values:
-            if not is_dominated(point, non_dominated_front):
-                non_dominated_front = [
-                    other for other in non_dominated_front if not is_dominated(other, [point])
-                ]
-                non_dominated_front.append(point)
-        return np.array(non_dominated_front)
+    def feasible_space(self):
+        test_x = np.random.uniform(self.bounds[0][0], self.bounds[0][1], size=(50000, self.n))
+        f_values = np.array([self.evaluate(x, x) for x in test_x])
+        return f_values
 
     def f1(self, x):
         """
